@@ -1,0 +1,56 @@
+.error-body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.error-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 40px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    margin: 20px;
+    border: 3px solid black;
+}
+
+.error-message {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #3c4452;
+    padding: 0 15px;
+}
+
+.error-image {
+    max-width: 250px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border: 3px solid black;
+}
+
+.error-home-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 32px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    text-transform: uppercase;
+ 
+}
+
+.contact-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.contact-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+

@@ -56,7 +56,44 @@ def forbidden(err):
 
 @app.errorhandler(404)
 def not_found(err):
-    return "Нет такой информации", 404
+    css_path = url_for("static", filename="404.css")
+    image_path = url_for("static", filename="zag.jpg")
+    return f'''
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 Страница не найдена</title>
+        <link rel="stylesheet" href="{css_path}">
+    </head>
+    <body class="error-body">
+        <div class="error-container">
+            <h1 style="font-size: 120px; font-weight: 900; color: #667eea;
+            margin: 0; line-height: 1;">404</h1>
+            
+            <h2 style="font-size: 20px; color: black;
+            margin: 20px 0 30px 0; line-height: 1.3;">Ой! Страница потерялась в цифровом пространстве</h2>
+            
+            <div class="error-image-container">
+                <img src="{image_path}" class="error-image">
+            </div>
+            
+            <p class="error-message">
+                Кажется, эта страница отправилась в незапланированное путешествие. 
+                Не волнуйтесь, проблему можно решить!<br>
+                Как это сделать? <a href="https://skillbox.ru/media/marketing/oshibka-404-na-stranitse-chto-ona-oznachaet-i-kak-eye-ispravit/" class="contact-link"> Нажимай сюда!</a>
+            </p>
+
+            <a href="/" class="error-home-button">Вернуться на главную страницу</a>
+
+            <p class="error-contact">
+                <a href="https://skillbox.ru/media/marketing/oshibka-404-na-stranitse-chto-ona-oznachaet-i-kak-eye-ispravit/" class="contact-link">Источник</a>
+            </p>
+        </div>
+    </body>
+</html>
+''', 404
 
 @app.errorhandler(405)
 def method_not_allowed(err):
