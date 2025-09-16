@@ -1,0 +1,49 @@
+.error-500-body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.error-500-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 40px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    margin: 20px;
+    border: 3px solid black;
+}
+
+.error-500-details {
+    font-size: 18px;
+    line-height: 1.0;
+    color: #3c4452;
+    padding: 0 15px;
+}
+
+
+.error-500-home-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 32px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    text-transform: uppercase;
+ 
+}
+
+.error-500-contact {
+    margin-top: 25px;
+    padding: 15px;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 15px;
+    border: 2px solid #ced4da;
+}
+

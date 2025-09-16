@@ -127,6 +127,43 @@ def im_a_teapot(err):
 </html>
 ''', 418
 
+@app.errorhandler(500)
+def handle_all_exceptions(err):
+    css_path = url_for("static", filename="500.css")
+    return f'''
+<!doctype html>
+<html>
+    <head>
+        <title>500</title>
+        <link rel="stylesheet" href="{css_path}">
+    </head>
+    <body class="error-500-body">
+        <div class="error-500-container">
+            <h1 style="font-size: 120px; font-weight: 900; color: #667eea;
+            margin: 0; line-height: 1;">500</h1>
+             <h2 style="font-size: 20px; color: black;
+            margin: 20px 0 30px 0; line-height: 1.3;">Ошибка сервера</h2>
+            
+            <div class="error-500-details">
+                <p>На сервере произошла непредвиденная ошибка</p>
+                <p>Пожалйста, подождите, скоро она будет исправлена</p>
+            </div>
+            
+            <a href="/" class="error-500-home-button">Вернуться на главную</a>
+            
+            <div class="error-500-contact">
+                Если проблема повторяется, свяжитесь с поддержкой сайта!
+            </div>
+        </div>
+    </body>
+</html>
+''', 500
+
+@app.route("/test/500")
+def test_500():
+    result = 10 / 0
+    return "Этот код никогда не выполнится"
+
 @app.route("/test/400")
 def test_400():
     abort(400)
@@ -234,25 +271,6 @@ def author():
                 <a href="/lab1/web">web</a>
             </body>
         </html>"""
-
-@app.route("/lab1/image")
-def image():
-    css_path = url_for("static", filename="lab1.css")
-    image_path = url_for("static", filename="oak.jpg")
-    return f'''
-<!doctype html>
-<html>
-    <head>
-        <link rel="stylesheet" href="{css_path}">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Дуб</h1>
-            <img src="{image_path}">
-        </div>
-    </body>
-</html>
-'''
 
 count = 0
 @app.route("/lab1/counter")
