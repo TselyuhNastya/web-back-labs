@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect, abort
+from flask import Flask, url_for, request, redirect, abort, make_response
 import datetime
 
 app = Flask(__name__)
@@ -249,7 +249,7 @@ def web():
         <html>
             <body>
                 <h1>web-сервер на flask</h1>
-                <a href="/lab1/webgit ">web</a>
+                <a href="/lab1/web">web</a>
             </body>
         </html>""", 200, {
             'X-Server': 'samlple',
@@ -271,6 +271,31 @@ def author():
                 <a href="/lab1/web">web</a>
             </body>
         </html>"""
+
+@app.route("/lab1/image")
+def image():
+    css_path = url_for("static", filename="lab1.css")
+    image_path = url_for("static", filename="oak.jpg")
+    headers = {
+        'Content-Language': 'en-EN',
+        'X-Custom-Header-1': 'Oak',
+        'X-Custom-Header-2': 'Flask'
+    }
+    return f'''
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{css_path}">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Дуб</h1>
+            <img src="{image_path}">
+        </div>
+    </body>
+</html>
+''', 200, headers
+
 
 count = 0
 @app.route("/lab1/counter")
