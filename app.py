@@ -6,6 +6,34 @@ app = Flask(__name__)
 def not_found(err):
     return "Нет такой информации", 404
 
+@app.route("/")
+@app.route("/index")
+def index():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>НГТУ, ФБ, Лабораторные работы</title>
+    </head>
+    <body>
+        <header>
+            <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="/lab1">Первая лабораторная</a></li>
+            </ul>
+        </nav>
+        
+        <footer>
+            <hr>
+            <p>Целюх Анастасия Степановна, ФБИ-32, 3 курс, 2025</p>
+        </footer>
+    </body>
+</html>
+'''
+
 @app.route("/lab1/web")
 def web():
     return """<!doctype html>
