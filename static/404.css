@@ -54,3 +54,20 @@
     text-decoration: underline;
 }
 
+h1 {
+    font-size: 120px;
+    font-weight: 900; 
+    color: #667eea;
+    margin: 0; 
+    line-height: 1;
+}
+
+h2 {
+    font-size: 20px;
+    color: black;
+    margin: 20px 0 30px 0; 
+    line-height: 1.3;
+}
+
+
+
