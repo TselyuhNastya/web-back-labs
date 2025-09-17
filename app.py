@@ -1,5 +1,6 @@
 from flask import Flask, url_for, request, redirect, abort
 import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -54,26 +55,38 @@ def forbidden(err):
 </html>
 ''', 403
 
+spisok = []
+
 @app.errorhandler(404)
 def not_found(err):
+    #информация о текущем запросе
+    client_ip = request.remote_addr
+    access_time = datetime.now()
+    requested_url = request.url
+    
+    #запись в лог
+    log_entry = f'[{access_time.strftime("%Y-%m-%d %H:%M:%S.%f")}, пользователь {client_ip}] зашёл на адрес: {requested_url}'
+    spisok.append(log_entry)
+    
     css_path = url_for("static", filename="404.css")
     image_path = url_for("static", filename="zag.jpg")
+    
+    #HTML для журнала
+    journal_html = ''
+    for entry in reversed(spisok[-20:]):
+        journal_html += f'<div class="log-entry">{entry}</div>'
+    
     return f'''
 <!doctype html>
-<html lang="ru">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>404 Страница не найдена</title>
         <link rel="stylesheet" href="{css_path}">
     </head>
     <body class="error-body">
         <div class="error-container">
-            <h1 style="font-size: 120px; font-weight: 900; color: #667eea;
-            margin: 0; line-height: 1;">404</h1>
-            
-            <h2 style="font-size: 20px; color: black;
-            margin: 20px 0 30px 0; line-height: 1.3;">Ой! Страница потерялась в цифровом пространстве</h2>
+            <h1>404</h1>
+            <h2>Ой! Страница потерялась в цифровом пространстве</h2>
             
             <div class="error-image-container">
                 <img src="{image_path}" class="error-image">
@@ -86,6 +99,20 @@ def not_found(err):
             </p>
 
             <a href="/" class="error-home-button">Вернуться на главную страницу</a>
+
+            <div>
+                <h3>Информация о запросе:</h3>
+                <p><i>IP-адрес:</i> {client_ip}</p>
+                <p><i>Дата и время:</i> {access_time.strftime('%Y-%m-%d %H:%M:%S')}</p>
+                <p><i>Запрошенный URL:</i> {requested_url}</p>
+            </div>
+
+            <div>
+                <h3>Журнал:</h3>
+                <div>
+                    {journal_html if journal_html else '<p>Записей нет</p>'}
+                </div>
+            </div>
 
             <p class="error-contact">
                 <a href="https://skillbox.ru/media/marketing/oshibka-404-na-stranitse-chto-ona-oznachaet-i-kak-eye-ispravit/" class="contact-link">Источник</a>
