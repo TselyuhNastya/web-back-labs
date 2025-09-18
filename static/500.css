@@ -1,4 +1,4 @@
-.error-500-body {
+.body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
@@ -6,7 +6,7 @@
     min-height: 100vh;
 }
 
-.error-500-container {
+.container {
     background: rgba(255, 255, 255, 0.95);
     padding: 40px 40px;
     text-align: center;
@@ -16,15 +16,14 @@
     border: 3px solid black;
 }
 
-.error-500-details {
+.details {
     font-size: 18px;
     line-height: 1.0;
     color: #3c4452;
     padding: 0 15px;
 }
 
-
-.error-500-home-button {
+.button {
     display: inline-block;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -38,12 +37,27 @@
  
 }
 
-.error-500-contact {
+.contact {
     margin-top: 25px;
     padding: 15px;
     background: #e9ecef;
     color: #495057;
     font-size: 15px;
     border: 2px solid #ced4da;
+}
+
+h1 {
+    font-size: 120px;
+    font-weight: 900;
+    color: #667eea;
+    margin: 0;
+    line-height: 1;
+}
+
+h2 {
+    font-size: 20px;
+    color: black;
+    margin: 20px 0 30px 0;
+    line-height: 1.3;
 }
 

@@ -1,11 +1,11 @@
 from flask import Flask, url_for, request, redirect, abort
-import datetime
 from datetime import datetime
+from werkzeug.exceptions import HTTPException
 
 app = Flask(__name__)
 
-@app.errorhandler(400)
-def bad_request(err):
+@app.route("/test/400")
+def error400():
     return '''
 <!doctype html>
 <html>
@@ -21,8 +21,8 @@ def bad_request(err):
 </html>
 ''', 400
 
-@app.errorhandler(401)
-def unauthorized(err):
+@app.route("/test/401")
+def error401():
     return '''
 <!doctype html>
 <html>
@@ -38,8 +38,29 @@ def unauthorized(err):
 </html>
 ''', 401
 
-@app.errorhandler(403)
-def forbidden(err):
+class PaymentRequired(HTTPException):
+    code = 402
+    description = 'Требуется оплата'
+
+@app.route("/test/402")
+def error402():
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <title>402 Payment Required</title>
+    </head>
+    <body>
+        <h1>402 Payment Required</h1>
+        <p>Запрос не может быть выполнен,
+        пока пользователь не произведёт оплату</p>
+        <a href="/">На главную</a>
+    </body>
+</html>
+''', 402
+
+@app.route("/test/403")
+def error403():
     return '''
 <!doctype html>
 <html>
@@ -56,22 +77,18 @@ def forbidden(err):
 ''', 403
 
 spisok = []
-
-@app.errorhandler(404)
-def not_found(err):
-    #информация о текущем запросе
+@app.route("/test/404")
+def error404():
     client_ip = request.remote_addr
     access_time = datetime.now()
     requested_url = request.url
     
-    #запись в лог
     log_entry = f'[{access_time.strftime("%Y-%m-%d %H:%M:%S.%f")}, пользователь {client_ip}] зашёл на адрес: {requested_url}'
     spisok.append(log_entry)
     
     css_path = url_for("static", filename="404.css")
     image_path = url_for("static", filename="zag.jpg")
     
-    #HTML для журнала
     journal_html = ''
     for entry in reversed(spisok[-20:]):
         journal_html += f'<div class="log-entry">{entry}</div>'
@@ -122,8 +139,8 @@ def not_found(err):
 </html>
 ''', 404
 
-@app.errorhandler(405)
-def method_not_allowed(err):
+@app.route("/test/405")
+def error405():
     return '''
 <!doctype html>
 <html>
@@ -138,8 +155,8 @@ def method_not_allowed(err):
 </html>
 ''', 405
 
-@app.errorhandler(418)
-def im_a_teapot(err):
+@app.route("/test/418")
+def error418():
     return '''
 <!doctype html>
 <html>
@@ -154,8 +171,8 @@ def im_a_teapot(err):
 </html>
 ''', 418
 
-@app.errorhandler(500)
-def handle_all_exceptions(err):
+@app.route("/test/500")
+def error500():
     css_path = url_for("static", filename="500.css")
     return f'''
 <!doctype html>
@@ -164,21 +181,19 @@ def handle_all_exceptions(err):
         <title>500</title>
         <link rel="stylesheet" href="{css_path}">
     </head>
-    <body class="error-500-body">
-        <div class="error-500-container">
-            <h1 style="font-size: 120px; font-weight: 900; color: #667eea;
-            margin: 0; line-height: 1;">500</h1>
-             <h2 style="font-size: 20px; color: black;
-            margin: 20px 0 30px 0; line-height: 1.3;">Ошибка сервера</h2>
+    <body class="body">
+        <div class="container">
+            <h1>500</h1>
+            <h2>Ошибка сервера</h2>
             
-            <div class="error-500-details">
+            <div class="details">
                 <p>На сервере произошла непредвиденная ошибка</p>
                 <p>Пожалйста, подождите, скоро она будет исправлена</p>
             </div>
             
-            <a href="/" class="error-500-home-button">Вернуться на главную</a>
+            <a href="/" class="button">Вернуться на главную</a>
             
-            <div class="error-500-contact">
+            <div class="contact">
                 Если проблема повторяется, свяжитесь с поддержкой сайта!
             </div>
         </div>
@@ -188,28 +203,12 @@ def handle_all_exceptions(err):
 
 @app.route("/test/500")
 def test_500():
-    result = 10 / 0
+    result = 52 / 0
     return "Этот код никогда не выполнится"
 
-@app.route("/test/400")
-def test_400():
-    abort(400)
-
-@app.route("/test/401")
-def test_401():
-    abort(401)
-
-@app.route("/test/403")
-def test_403():
-    abort(403)
-
-@app.route("/test/405")
-def test_405():
-    abort(405)
-
-@app.route("/test/418")
-def test_418():
-    abort(418)
+@app.route("/test/402")
+def test_402():
+    raise PaymentRequired()
 
 @app.route("/")
 @app.route("/index")
@@ -347,7 +346,7 @@ count = 0
 def counter():
     global count
     count += 1
-    time = datetime.datetime.today()
+    time = datetime.today()
     url = request.url
     client_ip = request.remote_addr
     return '''
