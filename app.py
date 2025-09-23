@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, redirect, abort
+from flask import Flask, url_for, request, redirect
 from datetime import datetime
 from werkzeug.exceptions import HTTPException
 
@@ -38,10 +38,6 @@ def error401():
 </html>
 ''', 401
 
-class PaymentRequired(HTTPException):
-    code = 402
-    description = 'Требуется оплата'
-
 @app.route("/test/402")
 def error402():
     return '''
@@ -77,8 +73,8 @@ def error403():
 ''', 403
 
 spisok = []
-@app.route("/test/404")
-def error404():
+@app.errorhandler(404)
+def error404(err):
     client_ip = request.remote_addr
     access_time = datetime.now()
     requested_url = request.url
@@ -205,10 +201,6 @@ def error500():
 def test_500():
     result = 52 / 0
     return "Этот код никогда не выполнится"
-
-@app.route("/test/402")
-def test_402():
-    raise PaymentRequired()
 
 @app.route("/")
 @app.route("/index")
