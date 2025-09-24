@@ -86,7 +86,7 @@ def error404(err):
     image_path = url_for("static", filename="zag.jpg")
     
     journal_html = ''
-    for entry in reversed(spisok[-20:]):
+    for entry in reversed(spisok):
         journal_html += f'<div class="log-entry">{entry}</div>'
     
     return f'''
@@ -377,3 +377,12 @@ def created():
     </body>
 </html>
 ''', 201
+
+@app.route("/lab2/a")
+def a():
+    return 'без слеша'
+
+@app.route("/lab2/a/")
+def a2():
+    return 'со слешом'
+
