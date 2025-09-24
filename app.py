@@ -289,7 +289,7 @@ def web():
             </body>
         </html>""", 200, {
             'X-Server': 'samlple',
-            'Content-Type' : 'text/plan; charset=utf-8'
+            'Content-Type' : 'text/plain; charset=utf-8'
         }
 
 @app.route("/lab1/author")
