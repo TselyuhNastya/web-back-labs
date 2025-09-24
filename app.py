@@ -167,8 +167,8 @@ def error418():
 </html>
 ''', 418
 
-@app.route("/test/500")
-def error500():
+@app.errorhandler(500)
+def internal_server_error(err):
     css_path = url_for("static", filename="500.css")
     return f'''
 <!doctype html>
