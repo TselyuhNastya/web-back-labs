@@ -6,25 +6,30 @@
     <h1>Расчёт с параметрами</h1>
     
     <div class="calc-results">
-        <p>{{ a }} + {{ b }} = <strong>{{ operations.sum }}</strong></p>
-        <p>{{ a }} - {{ b }} = <strong>{{ operations.subtract }}</strong></p>
-        <p>{{ a }} × {{ b }} = <strong>{{ operations.multiply }}</strong></p>
-        <p>{{ a }} / {{ b }} = <strong>{{ operations.divide }}</strong></p>
-        <p>{{ a }}<sup>{{ b }}</sup> = <strong>{{ operations.power }}</strong></p>
+        <ul>
+           <li>{{ a }} + {{ b }} = <strong>{{ operations.sum }}</strong></li>
+        <br>
+            <li>{{ a }} - {{ b }} = <strong>{{ operations.subtract }}</strong></li>
+        <br>
+            <li>{{ a }} × {{ b }} = <strong>{{ operations.multiply }}</strong></li>
+        <br>
+            <li>{{ a }} / {{ b }} = <strong>{{ operations.divide }}</strong></li>
+        <br>
+            <li>{{ a }}<sup>{{ b }}</sup> = <strong>{{ operations.power }}</strong></li>
     </div>
 
-    <div class="examples">
-        <h3>Примеры для тестирования:</h3>
+    <div>
+        <h3>Расчет с параментрами:</h3>
         <ul>
+            <li><a href="/lab2/calc/">1 и 1</a></li>
             <li><a href="/lab2/calc/3/4">3 и 4</a></li>
-            <li><a href="/lab2/calc/5/6">5 и 6</a></li>
+            <li><a href="/lab2/calc/6/3">6 и 3</a></li>
             <li><a href="/lab2/calc/7/8">7 и 8</a></li>
-            <li><a href="/lab2/calc/16">16 (второе число по умолчанию 1)</a></li>
-            <li><a href="/lab2/calc/">Без значений</a></li>
+            <li><a href="/lab2/calc/14">14 (второе число по умолчанию 1)</a></li>
         </ul>
     </div>
 
-    <div class="actions">
-        <a href="/lab2/">Назад к меню</a>
+    <div>
+        <a href="/lab2/">Меню</a>
     </div>
 {% endblock %}

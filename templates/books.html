@@ -4,40 +4,33 @@
 
 {% block main %}
     <h1>Список книг</h1>
-    
-    <div class="books-stat">
-        <p><strong>Общее количество книг:</strong> {{ total_books }}</p>
-        <p><strong>Общее количество страниц:</strong> {{ total_pages }}</p>
-        <p><strong>Среднее количество страниц на книгу:</strong> {{ (total_pages / total_books) | round(1) }}</p>
-    </div>
 
     <div class="list_of_books">
         <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
             <thead>
-                <tr style="background-color: #f2f2f2;">
+                <tr style="background-color: #dfc5af;">
                     <th>№</th>
                     <th>Автор</th>
                     <th>Название книги</th>
                     <th>Жанр</th>
-                    <th>Страниц</th>
+                    <th>Количество страниц</th>
                 </tr>
             </thead>
             <tbody>
                 {% for book in books %}
-                <tr {% if loop.index % 2 == 0 %}style="background-color: #f9f9f9;"{% endif %}>
+                <tr>
                     <td style="text-align: center;">{{ loop.index }}</td>
-                    <td>{{ book.author }}</td>
-                    <td><strong>{{ book.title }}</strong></td>
-                    <td>{{ book.genre }}</td>
+                    <td style="text-align: center;">{{ book.author }}</td>
+                    <td style="text-align: center;">{{ book.title }}</td>
+                    <td style="text-align: center;">{{ book.genre }}</td>
                     <td style="text-align: center;">{{ book.pages }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-
-    <div class="actions">
-        <a href="/lab2/">Назад к меню</a>
-    </div>
+    <br>
+    <a href="/lab2/">Меню</a>
+    
 {% endblock %}
 

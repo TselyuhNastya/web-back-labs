@@ -387,31 +387,7 @@ def a():
 def a2():
     return 'со слешом'
 
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
-@app.route('/lab2/flowers/<int:flower_id>')
-def flowers(flower_id):
-    if flower_id < 0 or flower_id >= len(flower_list):
-        abort(404)
-    else:
-        return render_template('flower.html', 
-                            flower=flower_list[flower_id], 
-                            flower_id=flower_id,
-                            total_flowers=len(flower_list))
 
-@app.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name}</p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}</p>
-    </body>
-</html>
-'''
 @app.route('/lab2/example')
 def example():
     name, num, group, kurs = "Целюх Анастасия", 2, "ФБИ-32", "3 курс" 
@@ -433,28 +409,15 @@ def filters():
     phrase = "О, <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase = phrase)
 
-@app.route('/lab2/add_flower/')
-def add_flower_empty():
-    return render_template('error_fl.html'), 400
+flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
 
 @app.route('/lab2/add_flower/<name>')
 def add_flower_with_name(name):
     flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name}</p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {', '.join(flower_list)}</p>
-    <hr>
-    <a href="/lab2/flowers">Посмотреть все цветы</a> |
-    <a href="/lab2/add_flower/Еще_цветок">Добавить еще цветок</a> |
-    <a href="/lab2/">Назад к лабораторной 2</a>
-    </body>
-</html>
-'''
+    return render_template('add_fl.html', 
+                         name=name, 
+                         count=len(flower_list), 
+                         flower_list=flower_list)
 
 @app.route('/lab2/flowers/<int:flower_id>')
 def specific_flower(flower_id):
@@ -462,7 +425,7 @@ def specific_flower(flower_id):
         return "Цветок не найден", 404
     
     flower = flower_list[flower_id]
-    return render_template('specific_flower.html', 
+    return render_template('specific_fl.html', 
                          flower_id=flower_id, 
                          flower=flower, 
                          total_flowers=len(flower_list))
@@ -471,10 +434,14 @@ def specific_flower(flower_id):
 def all_flowers():
     return render_template('flowers.html', flowers=flower_list, count=len(flower_list))
 
+@app.route('/lab2/add_flower/')
+def add_flower_empty():
+    return render_template('error_fl.html'), 400
+
 @app.route('/lab2/flowers/rewrite')
 def clear_flowers():
     flower_list.clear()
-    flower_list.extend(['Пион', 'Ромашка', 'Саранка', 'Незабудка'])
+    flower_list.extend(['роза', 'тюльпан', 'незабудка', 'ромашка'])
     return render_template('rewrite_fl.html')
 
 @app.route('/lab2/calc/<int:a>/<int:b>')
@@ -482,7 +449,7 @@ def calc(a, b):
     try:
         divide_result = a / b
     except ZeroDivisionError:
-        divide_result = 'Ошибка: деление на ноль'
+        divide_result = 'Делить на ноль нельзя!'
     
     operations = {
         'sum': a + b,

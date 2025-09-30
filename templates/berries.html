@@ -13,8 +13,7 @@
         {% for berry in berries %}
         <div class="berry-card">
             <div class="berry-image">
-                <img src="{{ url_for('static', filename='berries/' + berry.image) }}" 
-                    alt="{{ berry.name }}" >
+                <img src="{{ url_for('static', filename='berries/' + berry.image) }}">
             </div>
             <div class="berry-info">
                 <h3>{{ berry.name }}</h3>
@@ -27,7 +26,6 @@
         {% endfor %}
     </div>
 
-    <div class="actions">
-        <a href="/lab2/">Назад к меню</a>
-    </div>
+    <a href="/lab2/">Меню</a>
+    
 {% endblock %}
