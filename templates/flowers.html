@@ -6,15 +6,13 @@
     <h1>Все цветы</h1>
     
     <div class="flowers-info">
-        <p><strong>Общее количество цветов:</strong> {{ count }}</p>
+        <p><i>Общее количество цветов:</i> {{ count }}</p>
     </div>
 
     {% if flowers %}
         <ul class="flowers-list">
             {% for flower in flowers %}
-                <li>
-                    <a href="/lab2/flowers/{{ loop.index0 }}">{{ flower }}</a>
-                </li>
+                <li>{{ flower }}</li>
             {% endfor %}
         </ul>
     {% else %}
@@ -22,8 +20,11 @@
     {% endif %}
 
     <div class="actions">
-        <a href="/lab2/flowers/rewrite">Очистить список цветов</a> |
-        <a href="/lab2/add_flower/Новый_цветок">Добавить цветок</a> |
-        <a href="/lab2/">Назад к меню</a>
+        <a href="/lab2/flowers/rewrite">Очистить список цветов</a>
+        <br>
+        <a href="/lab2/add_flower/Новый_цветок">Добавить цветок</a> 
+        <br>
+        <br>
+        <a href="/lab2/">Меню</a>
     </div>
 {% endblock %}

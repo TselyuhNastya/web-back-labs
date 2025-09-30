@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Целюх Анастасия. {% block lab %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon-16x16.png') }}" type="image/png" sizes="16x16">
+    <link rel="icon" href="{{ url_for('static', filename='icon/favicon-32x32.png') }}" type="image/png" sizes="32x32">
 </head>
 <body>
     <header>
@@ -12,6 +15,7 @@
     </header>
 
     <main>
+        <a href="/">Главная страница</a>
         {% block main %}{% endblock %}
     </main>
 

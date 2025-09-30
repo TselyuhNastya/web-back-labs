@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>WEB-программирование, часть 2. {% if num %}Лабораторная работа 2{% endif %}</h1>
+        WEB-программирование, часть 2. {% if num %}Лабораторная работа 2{% endif %}
     </header>
     
     <main>
@@ -22,6 +22,7 @@
             <li>{{ loop.index }} - {{ f.name }}: {{ f.price }} &#x20bd;</li>
             {% endfor %}
         </ul>
+        <a href="/lab2/">Меню</a>
     </main>
 
     <footer>
