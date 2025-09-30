@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+    <h1>Популярные ягоды</h1>
+    
+    <div class="berries-stats">
+        <p><strong>Всего видов ягод:</strong> {{ total_berries }}</p>
+    </div>
+
+    <div class="berries-grid">
+        {% for berry in berries %}
+        <div class="berry-card">
+            <div class="berry-image">
+                <img src="{{ url_for('static', filename='berries/' + berry.image) }}" 
+                    alt="{{ berry.name }}" >
+            </div>
+            <div class="berry-info">
+                <h3>{{ berry.name }}</h3>
+                <p class="berry-description">{{ berry.description }}</p>
+                <div class="berry-details">
+                    <span class="berry-season">Сезон созревания: {{ berry.season }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="actions">
+        <a href="/lab2/">Назад к меню</a>
+    </div>
+{% endblock %}
