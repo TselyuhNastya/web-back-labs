@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 2{% endblock %}
+
+{% block main %}
+    <h1>Ошибка 400 - Неверный запрос</h1>
+    <p>Вы не задали имя цветка</p>
+    
+    <div class="actions">
+        <a href="/lab2/add_flower/Василёк">Добавить цветок с именем</a> |
+        <a href="/lab2/flowers">Посмотреть все цветы</a> |
+        <a href="/lab2/">Назад к меню</a>
+    </div>
+{% endblock %}
