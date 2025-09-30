@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Целюх Анастасия. Лабораторная работа {{ num }}</title>
+    <title>{% if name %}Целюх Анастасия{% endif %}. Лабораторная работа {{ num }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'main.css') }}">
 </head>
 <body>
     <header>
-        <h1>НГТУ, ФБ, WEB-программирование, часть 2. Лабораторная работа {{ num }}</h1>
+        <h1>WEB-программирование, часть 2. {% if num %}Лабораторная работа 2{% endif %}</h1>
     </header>
     
     <main>
@@ -17,10 +17,31 @@
         3258 - 759 = {{ 3258 - 759 }}<br>
         8452 / 793 = {{ 8452 / 793 }}<br>
         45<sup>8</sup> = {{ 45**8 }}
+        <ul>
+            {% for f in fruits %}
+            <li>{{ loop.index }} - {{ f.name }}: {{ f.price }} &#x20bd;</li>
+            {% endfor %}
+        </ul>
     </main>
 
     <footer>
-        &copy; {{ name }}, ФБИ-32, {{ kurs }} курс, 2025</p>
+        &copy;
+        {% if name %} 
+            {{ name }},
+        {% else %}
+            Анонимус,
+        {% endif %}
+        {% if group %}  
+            {{ group }},
+        {% else %}
+            Без группы,
+        {% endif %}
+        {% if kurs %} 
+            {{ kurs }},
+        {% else %} 
+            Без курса,
+        {% endif %}
+        2025
     </footer>
 </body>
 </html>
