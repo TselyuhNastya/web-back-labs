@@ -444,14 +444,9 @@ flower_prices = {
 
 @app.route('/lab2/flowers')
 def all_flowers():
-    total = 0
-    for flower in flower_list:
-        total += flower_prices.get(flower, 300)
-    
     return render_template('flowers.html', 
                          flowers=flower_list,
-                         flower_prices=flower_prices,
-                         total_price=total)
+                         flower_prices=flower_prices)
 
 @app.route('/lab2/add_flower/')
 def add_flower_empty():
