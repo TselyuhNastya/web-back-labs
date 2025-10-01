@@ -1,6 +1,7 @@
 from flask import Flask, url_for, request, redirect, abort, render_template
 from datetime import datetime
 from werkzeug.exceptions import HTTPException
+import random
 
 app = Flask(__name__)
 
@@ -414,6 +415,10 @@ flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашк
 @app.route('/lab2/add_flower/<name>')
 def add_flower_with_name(name):
     flower_list.append(name)
+    # Добавляем установку случайной цены
+    random_price = random.randint(50, 500)
+    flower_prices[name] = random_price
+    
     return render_template('add_fl.html', 
                          name=name, 
                          count=len(flower_list), 
@@ -430,9 +435,23 @@ def specific_flower(flower_id):
                          flower=flower, 
                          total_flowers=len(flower_list))
 
+flower_prices = {
+    'роза': 450,
+    'тюльпан': 150, 
+    'незабудка': 200,
+    'ромашка': 50
+}
+
 @app.route('/lab2/flowers')
 def all_flowers():
-    return render_template('flowers.html', flowers=flower_list, count=len(flower_list))
+    total = 0
+    for flower in flower_list:
+        total += flower_prices.get(flower, 300)
+    
+    return render_template('flowers.html', 
+                         flowers=flower_list,
+                         flower_prices=flower_prices,
+                         total_price=total)
 
 @app.route('/lab2/add_flower/')
 def add_flower_empty():
@@ -443,6 +462,28 @@ def clear_flowers():
     flower_list.clear()
     flower_list.extend(['роза', 'тюльпан', 'незабудка', 'ромашка'])
     return render_template('rewrite_fl.html')
+
+@app.route('/lab2/del_flower/<int:flower_id>')
+def delete_flower(flower_id):
+    if flower_id < 0 or flower_id >= len(flower_list):
+        abort(404)
+    
+    flower_list.pop(flower_id)
+    return redirect('/lab2/flowers')
+
+@app.route('/lab2/add_flower_form', methods=['POST'])
+def add_flower_form():
+    name = request.form.get('flower_name', '').strip()
+    if name:
+        flower_list.append(name)
+        random_price = random.randint(50, 500)
+        flower_prices[name] = random_price
+    return redirect('/lab2/flowers')
+
+@app.route('/lab2/del_all_flowers')
+def delete_all_flowers():
+    flower_list.clear()
+    return redirect('/lab2/flowers')
 
 @app.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b):
