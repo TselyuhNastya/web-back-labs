@@ -14,7 +14,7 @@ header {
     color: #000000;
     border-radius: 8px;
     border: 2px solid #d4c1b0;
-    font-size: 2em; 
+    font-size: 28px;
     font-weight: bold; 
     line-height: 1.2; 
 }
@@ -75,7 +75,7 @@ footer {
 /* Контейнер для изображения */
 .berry-image {
     width: 100%;
-    height: 200px; /* Фиксированная высота для всех изображений */
+    height: 200px; 
 }
 
 /* Стили для изображений ягод */

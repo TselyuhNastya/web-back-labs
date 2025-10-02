@@ -5,15 +5,18 @@
 {% block main %}
     <h1>Информация о цветке</h1>
     
-    <div class="flower-detail">
+    <div>
         <p><strong>ID цветка:</strong> {{ flower_id }}</p>
         <p><strong>Название:</strong> {{ flower }}</p>
         <p><strong>Всего цветов в списке:</strong> {{ total_flowers }}</p>
     </div>
 
-    <div class="navigation">
-        <a href="/lab2/flowers">Посмотреть все цветы</a> |
-        <a href="/lab2/add_flower/">Добавить цветок</a> |
+    <div>
+        <a href="/lab2/flowers">Посмотреть все цветы</a>
+        <br>
+        <a href="/lab2/add_flower/">Добавить цветок</a> 
+        <br>
+        <br>
         <a href="/lab2/">Меню</a>
     </div>
 {% endblock %}
