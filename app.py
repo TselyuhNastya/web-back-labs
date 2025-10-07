@@ -425,15 +425,14 @@ def add_flower_with_name(name):
                         flower_list=flower_list)
 
 @app.route('/lab2/flowers/<int:flower_id>')
-def specific_flower(flower_id):
+def flowers(flower_id):
     if flower_id < 0 or flower_id >= len(flower_list):
-        return "Цветок не найден", 404
-    
-    flower = flower_list[flower_id]
-    return render_template('specific_fl.html', 
-                        flower_id=flower_id, 
-                        flower=flower, 
-                        total_flowers=len(flower_list))
+        abort(404)
+    else:
+        return render_template('info_fl.html', 
+                            flower=flower_list[flower_id], 
+                            flower_id=flower_id,
+                            total_flowers=len(flower_list))
 
 flower_prices = {
     'роза': 450,
@@ -468,7 +467,7 @@ def delete_flower(flower_id):
 
 @app.route('/lab2/add_flower_form', methods=['POST'])
 def add_flower_form():
-    name = request.form.get('flower_name', '').strip()
+    name = request.form.get('flower_name')
     if name:
         flower_list.append(name)
         random_price = random.randint(50, 500)
@@ -521,13 +520,7 @@ books = [
 
 @app.route('/lab2/books')
 def books_list():
-    total_books = len(books)
-    total_pages = sum(book['pages'] for book in books)
-    
-    return render_template('books.html', 
-                        books=books, 
-                        total_books=total_books,
-                        total_pages=total_pages)
+    return render_template('books.html', books=books)
 
 @app.route('/lab2/berries/')
 def berries():
