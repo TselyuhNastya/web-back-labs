@@ -16,7 +16,7 @@
     <div>Ваш возраст: {{ age }}</div>
     <div>Ваш пол: {{ 'Мужской' if sex == 'male' else 'Женский' }}</div>
     <div>
-        <a href="/lab3/forml">Заново</a>
+        <a href="/lab3/form1">Заново</a>
     </div>
 
     {% else %}
@@ -26,12 +26,14 @@
     <form>
         <lable>Ваше имя:</lable>
         <div>
-            <input type="text" placeholder="Как вас зовут?" name="user">
+            <input type="text" placeholder="Как вас зовут?" name="user" value="{{ user or '' }}">
+            <span class="error">{{ errors.user }}</span>
         </div>
 
         <lable>Ваш возраст:</lable>
         <div>
-            <input type="number" name="age">
+            <input type="number" name="age" value="{{ age or '' }}">
+            <span class="error">{{ errors.age }}</span>
         </div>
 
         <lable>Ваш пол:</lable>
