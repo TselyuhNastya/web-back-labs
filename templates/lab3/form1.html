@@ -9,10 +9,10 @@
 {# основной контент: #}
 {% block main %}
 
-    {% if user %}
+    {% if user and age %}
 
     <h1>Привет, {{ user }}</h1>
-    <h2>Добро поджаловать на наш сайт!</h2>
+    <h2>Добро пожаловать на наш сайт!</h2>
     <div>Ваш возраст: {{ age }}</div>
     <div>Ваш пол: {{ 'Мужской' if sex == 'male' else 'Женский' }}</div>
     <div>
@@ -24,19 +24,19 @@
     <h1>Пользователи</h1>
 
     <form>
-        <lable>Ваше имя:</lable>
+        <label>Ваше имя:</label>
         <div>
             <input type="text" placeholder="Как вас зовут?" name="user" value="{{ user or '' }}">
             <span class="error">{{ errors.user }}</span>
         </div>
 
-        <lable>Ваш возраст:</lable>
+        <label>Ваш возраст:</label>
         <div>
             <input type="number" name="age" value="{{ age or '' }}">
             <span class="error">{{ errors.age }}</span>
         </div>
 
-        <lable>Ваш пол:</lable>
+        <label>Ваш пол:</label>
         <div>
             <select name="sex">
                 <option value="male" {{ sex == 'male' and 'selected' }}>Мужчина</option>
@@ -51,5 +51,7 @@
 
     {% endif %}
 
-    <p><a href="/lab3/">Меню</a></p>
+    <br>
+    <br>
+    <a href="/lab3/">Меню</a>
 {% endblock %}
