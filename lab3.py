@@ -215,7 +215,116 @@ def result_ticket():
                          ticket_type=ticket_type, total_price=total_price,
                          base_price=base_price, shelf_price=shelf_price)
 
+# Список книг
+BOOKS = [
+    {"title": "Мастер и Маргарита", "author": "Михаил Булгаков", "price": 450, "genre": "Роман", "pages": 480},
+    {"title": "Преступление и наказание", "author": "Федор Достоевский", "price": 380, "genre": "Классика", "pages": 592},
+    {"title": "Война и мир", "author": "Лев Толстой", "price": 650, "genre": "Эпопея", "pages": 1225},
+    {"title": "Анна Каренина", "author": "Лев Толстой", "price": 420, "genre": "Роман", "pages": 864},
+    {"title": "Евгений Онегин", "author": "Александр Пушкин", "price": 280, "genre": "Поэма", "pages": 320},
+    {"title": "Отцы и дети", "author": "Иван Тургенев", "price": 320, "genre": "Роман", "pages": 288},
+    {"title": "Герой нашего времени", "author": "Михаил Лермонтов", "price": 290, "genre": "Роман", "pages": 224},
+    {"title": "Мертвые души", "author": "Николай Гоголь", "price": 350, "genre": "Поэма", "pages": 352},
+    {"title": "Тихий Дон", "author": "Михаил Шолохов", "price": 580, "genre": "Эпопея", "pages": 1504},
+    {"title": "Доктор Живаго", "author": "Борис Пастернак", "price": 390, "genre": "Роман", "pages": 544},
+    {"title": "Идиот", "author": "Федор Достоевский", "price": 410, "genre": "Роман", "pages": 640},
+    {"title": "Братья Карамазовы", "author": "Федор Достоевский", "price": 520, "genre": "Роман", "pages": 824},
+    {"title": "Обломов", "author": "Иван Гончаров", "price": 310, "genre": "Роман", "pages": 416},
+    {"title": "Петербургские повести", "author": "Николай Гоголь", "price": 270, "genre": "Повести", "pages": 256},
+    {"title": "Горе от ума", "author": "Александр Грибоедов", "price": 240, "genre": "Комедия", "pages": 192},
+    {"title": "Вишневый сад", "author": "Антон Чехов", "price": 220, "genre": "Пьеса", "pages": 128},
+    {"title": "На дне", "author": "Максим Горький", "price": 230, "genre": "Пьеса", "pages": 144},
+    {"title": "Двенадцать стульев", "author": "Илья Ильф, Евгений Петров", "price": 330, "genre": "Юмор", "pages": 432},
+    {"title": "Золотой теленок", "author": "Илья Ильф, Евгений Петров", "price": 340, "genre": "Юмор", "pages": 416},
+    {"title": "Мы", "author": "Евгений Замятин", "price": 290, "genre": "Антиутопия", "pages": 320}
+]
 
+def get_price_range():
+    prices = [book["price"] for book in BOOKS]
+    return min(prices), max(prices)
 
+def filter_books(min_price_str, max_price_str):
+    """Фильтрует книги по цене"""
+    filtered_books = BOOKS.copy()
+    
+    # Обрабатываем минимальную цену
+    if min_price_str:
+        try:
+            min_price = float(min_price_str)
+            filtered_books = [book for book in filtered_books if book["price"] >= min_price]
+        except ValueError:
+            pass
+    
+    # Обрабатываем максимальную цену
+    if max_price_str:
+        try:
+            max_price = float(max_price_str)
+            filtered_books = [book for book in filtered_books if book["price"] <= max_price]
+        except ValueError:
+            pass
+    
+    # Если пользователь перепутал мин и макс, меняем местами
+    if min_price_str and max_price_str:
+        try:
+            min_price = float(min_price_str)
+            max_price = float(max_price_str)
+            if min_price > max_price:
+                filtered_books = [book for book in BOOKS if max_price <= book["price"] <= min_price]
+        except ValueError:
+            pass
+    
+    return filtered_books
 
-
+@lab3.route('/lab3/books', methods=["GET", "POST"])
+def books_search():
+    min_price_all, max_price_all = get_price_range()
+    
+    # Получаем значения из куки
+    min_price_cookie = request.cookies.get("min_price", "")
+    max_price_cookie = request.cookies.get("max_price", "")
+    
+    # Обработка сброса
+    if request.method == "POST" and "reset" in request.form:
+        min_price = ""
+        max_price = ""
+        filtered_books = BOOKS
+        response = make_response(render_template("lab3/dop_book.html", 
+                           books=filtered_books,
+                           min_price=min_price,
+                           max_price=max_price,
+                           min_price_all=min_price_all,
+                           max_price_all=max_price_all,
+                           count=len(filtered_books)))
+        response.set_cookie("min_price", "", expires=0)
+        response.set_cookie("max_price", "", expires=0)
+        return response
+    
+    # Обработка поиска
+    if request.method == "POST":
+        min_price = request.form.get("min_price", "").strip()
+        max_price = request.form.get("max_price", "").strip()
+    else:
+        # Используем значения из куки при первом заходе
+        min_price = min_price_cookie
+        max_price = max_price_cookie
+    
+    # Фильтрация книг
+    filtered_books = BOOKS
+    if min_price or max_price:
+        filtered_books = filter_books(min_price, max_price)
+    
+    # Создаем ответ (ИСПРАВЛЕНА ОПЕЧАТКА - закрыта кавычка)
+    response = make_response(render_template("lab3/dop_book.html", 
+                           books=filtered_books,
+                           min_price=min_price,
+                           max_price=max_price,
+                           min_price_all=min_price_all,
+                           max_price_all=max_price_all,
+                           count=len(filtered_books)))
+    
+    # Сохраняем в куки если был поиск
+    if request.method == "POST" and "search" in request.form:
+        response.set_cookie("min_price", min_price)
+        response.set_cookie("max_price", max_price)
+    
+    return response
