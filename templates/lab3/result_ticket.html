@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab3/lab3_ticket.css')}}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>
+        <span class="label">Железнодорожный билет</span>
+        <span class="value"><strong><em>({{ ticket_type }})</em></strong></span>
+    </h1>
+
+    <div class="ticket-info">
+        <div class="info-row">
+            <span class="label">Пассажир:</span>
+            <span class="value">{{ fio }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="label">Возраст:</span>
+            <span class="value">{{ age }} лет</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Маршрут:</span>
+            <span class="value">{{ departure }} → {{ destination }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Дата:</span>
+            <span class="value">{{ date }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Полка:</span>
+            <span class="value">{{ shelf_name }}</span>
+        </div>
+    </div>
+
+    <div class="price-calculation">
+        <h3>Расчет стоимости:</h3>
+        <ul>
+            <li>Базовая стоимость: {{ base_price }} руб</li>
+            {% if shelf_price > 0 %}
+            <li>Доплата за полку: {{ shelf_price }} руб</li>
+            {% endif %}
+            {% if bedding %}
+            <li>Постельное бельё: 75 руб</li>
+            {% endif %}
+            {% if luggage %}
+            <li>Багаж: 250 руб</li>
+            {% endif %}
+            {% if insurance %}
+            <li>Страховка: 150 руб</li>
+            {% endif %}
+        </ul>
+        
+        <div class="total-price">
+            <h3>Итого к оплате: {{ total_price }} руб</h3>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="/lab3/ticket">Оформить новый билет</a>
+        <br>
+        <a href="/lab3/">Меню</a>
+    </div>
+{% endblock %}

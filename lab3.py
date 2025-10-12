@@ -112,6 +112,100 @@ def settings():
 
 
 
+@lab3.route('/lab3/ticket')
+def ticket_form():
+    errors = {}
+    fio = request.args.get('fio', '')
+    age = request.args.get('age', '')
+    departure = request.args.get('departure', '')
+    destination = request.args.get('destination', '')
+    date = request.args.get('date', '')
+    shelf = request.args.get('shelf', 'lower')
+    bedding = request.args.get('bedding', '')
+    luggage = request.args.get('luggage', '')
+    insurance = request.args.get('insurance', '')
+    
+    return render_template('lab3/ticket.html', errors=errors,
+                         fio=fio, age=age,
+                         departure=departure, destination=destination,
+                         date=date, shelf=shelf,
+                         bedding=bedding, luggage=luggage, insurance=insurance)
+
+
+@lab3.route('/lab3/result_ticket')
+def result_ticket():
+    errors = {}
+    fio = request.args.get('fio', '').strip()
+    age = request.args.get('age', '')
+    departure = request.args.get('departure', '').strip()
+    destination = request.args.get('destination', '').strip()
+    date = request.args.get('date', '')
+    shelf = request.args.get('shelf', 'lower')
+    bedding = request.args.get('bedding') == 'on'
+    luggage = request.args.get('luggage') == 'on'
+    insurance = request.args.get('insurance') == 'on'
+    
+    # Проверки
+    if not fio:
+        errors['fio'] = 'Заполните ФИО'
+    if not age:
+        errors['age'] = 'Заполните возраст'
+    elif not age.isdigit() or not (1 <= int(age) <= 120):
+        errors['age'] = 'Возраст должен быть от 1 до 120 лет'
+    if not departure:
+        errors['departure'] = 'Заполните пункт выезда'
+    if not destination:
+        errors['destination'] = 'Заполните пункт назначения'
+    if not date:
+        errors['date'] = 'Выберите дату'
+    
+    if errors:
+        return render_template('lab3/ticket.html',
+                             errors=errors,
+                             fio=fio, age=age,
+                             departure=departure, destination=destination,
+                             date=date, shelf=shelf,
+                             bedding=bedding,
+                             luggage=luggage,
+                             insurance=insurance)
+    
+    age_int = int(age)
+    if age_int < 18:
+        base_price = 700
+        ticket_type = "Детский билет"
+    else:
+        base_price = 1000
+        ticket_type = "Взрослый билет"
+    
+    # Расчет стоимости с разбивкой
+    shelf_price = 100 if shelf in ['lower', 'lower_side'] else 0
+    additional_price = 0
+    
+    if bedding:
+        additional_price += 75
+    if luggage:
+        additional_price += 250
+    if insurance:
+        additional_price += 150
+    
+    total_price = base_price + shelf_price + additional_price
+    
+    shelf_names = {
+        'lower': 'Нижняя',
+        'upper': 'Верхняя',
+        'upper_side': 'Верхняя боковая',
+        'lower_side': 'Нижняя боковая'
+    }
+    
+    return render_template('lab3/result_ticket.html',
+                         fio=fio, age=age,
+                         departure=departure, destination=destination,
+                         date=date, shelf_name=shelf_names[shelf],
+                         bedding=bedding, luggage=luggage, insurance=insurance,
+                         ticket_type=ticket_type, total_price=total_price,
+                         base_price=base_price, shelf_price=shelf_price)
+
+
 
 
 

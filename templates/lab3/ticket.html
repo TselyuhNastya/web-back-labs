@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab3/lab3_ticket.css')}}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{% block main %}
+    <h1>Оформление железнодорожного билета</h1>
+    
+    <form action="/lab3/result_ticket">
+        <div class="form-section">
+            <h2>Данные для оформления билета</h2>
+            
+            <div>
+                <label for="fio">ФИО пассажира:</label>
+                <input type="text" id="fio" name="fio" value="{{ fio or '' }}" required>
+                <span class="error">{{ errors.fio }}</span>
+            </div>
+            <br>
+            <div>
+                <label for="age">Возраст:</label>
+                <input type="number" id="age" name="age" min="1" max="120" value="{{ age or '' }}" required>
+                <span class="error">{{ errors.age }}</span>
+            </div>
+            <br>
+            <div>
+                <label for="departure">Пункт выезда:</label>
+                <input type="text" id="departure" name="departure" value="{{ departure or '' }}" required>
+                <span class="error">{{ errors.departure }}</span>
+            </div>
+            <br>
+            <div>
+                <label for="destination">Пункт назначения:</label>
+                <input type="text" id="destination" name="destination" value="{{ destination or '' }}" required>
+                <span class="error">{{ errors.destination }}</span>
+            </div>
+            <br>
+            <div>
+                <label for="date">Дата поездки:</label>
+                <input type="date" id="date" name="date" value="{{ date or '' }}" required>
+                <span class="error">{{ errors.date }}</span>
+            </div>
+            <br>
+            <div>
+                <label for="shelf">Тип полки:</label>
+                <select name="shelf" id="shelf" required>
+                    <option value="lower" {{ 'selected' if shelf == 'lower' }}>Нижняя</option>
+                    <option value="upper" {{ 'selected' if shelf == 'upper' }}>Верхняя</option>
+                    <option value="upper_side" {{ 'selected' if shelf == 'upper_side' }}>Верхняя боковая</option>
+                    <option value="lower_side" {{ 'selected' if shelf == 'lower_side' }}>Нижняя боковая</option>
+                </select>
+            </div>
+        </div> 
+
+        <div class="form-section">
+            <h2>Дополнительные услуги</h2>
+            <div>
+                <label>
+                    <input type="checkbox" name="bedding" {{ 'checked' if bedding }}>
+                    Постельное бельё (+75 руб)
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="luggage" {{ 'checked' if luggage }}>
+                    Багаж (+250 руб)
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="insurance" {{ 'checked' if insurance }}>
+                    Страховка (+150 руб)
+                </label>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="actions">
+            <button type="submit">Рассчитать стоимость</button>
+            <br>
+            <br>
+            <a href="/lab3/" class="button-link">Меню</a>
+        </div>
+    </form>
+{% endblock %}
