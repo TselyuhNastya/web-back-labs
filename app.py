@@ -21,8 +21,8 @@ def error404(err):
     log_entry = f'[{access_time.strftime("%Y-%m-%d %H:%M:%S.%f")}, пользователь {client_ip}] зашёл на адрес: {requested_url}'
     spisok.append(log_entry)
     
-    css_path = url_for("static", filename="404.css")
-    image_path = url_for("static", filename="zag.jpg")
+    css_path = url_for("static", filename="lab1/404.css")
+    image_path = url_for("static", filename="lab1/zag.jpg")
     
     journal_html = ''
     for entry in reversed(spisok):
@@ -77,7 +77,7 @@ def error404(err):
 
 @app.errorhandler(500)
 def internal_server_error(err):
-    css_path = url_for("static", filename="500.css")
+    css_path = url_for("static", filename="lab1/500.css")
     return f'''
 <!doctype html>
 <html>

@@ -26,18 +26,18 @@ def example():
         {'name': 'мандарины','price': 95},
         {'name': 'манго', 'price': 321}
     ]
-    return render_template('examples.html', name=name, num=num, group=group, kurs=kurs, fruits=fruits)
+    return render_template('lab2/examples.html', name=name, num=num, group=group, kurs=kurs, fruits=fruits)
 
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О, <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
@@ -48,7 +48,7 @@ def add_flower_with_name(name):
     random_price = random.randint(50, 500)
     flower_prices[name] = random_price
     
-    return render_template('add_fl.html', 
+    return render_template('lab2/add_fl.html', 
                         name=name, 
                         count=len(flower_list), 
                         flower_list=flower_list)
@@ -59,7 +59,7 @@ def flowers(flower_id):
     if flower_id < 0 or flower_id >= len(flower_list):
         abort(404)
     else:
-        return render_template('info_fl.html', 
+        return render_template('lab2/info_fl.html', 
                             flower=flower_list[flower_id], 
                             flower_id=flower_id,
                             total_flowers=len(flower_list))
@@ -73,21 +73,21 @@ flower_prices = {
 }
 @lab2.route('/lab2/flowers')
 def all_flowers():
-    return render_template('flowers.html', 
+    return render_template('lab2/flowers.html', 
                         flowers=flower_list,
                         flower_prices=flower_prices)
 
 
 @lab2.route('/lab2/add_flower/')
 def add_flower_empty():
-    return render_template('error_fl.html'), 400
+    return render_template('lab2/error_fl.html'), 400
 
 
 @lab2.route('/lab2/flowers/rewrite')
 def clear_flowers():
     flower_list.clear()
     flower_list.extend(['роза', 'тюльпан', 'незабудка', 'ромашка'])
-    return render_template('rewrite_fl.html')
+    return render_template('lab2/rewrite_fl.html')
 
 
 @lab2.route('/lab2/del_flower/<int:flower_id>')
@@ -103,7 +103,7 @@ def delete_flower(flower_id):
 def add_flower_form():
     name = request.form.get('flower_name')
     if name:
-        flower_list.lab2end(name)
+        flower_list.append(name)
         random_price = random.randint(50, 500)
         flower_prices[name] = random_price
     return redirect('/lab2/flowers')
@@ -129,7 +129,7 @@ def calc(a, b):
         'divide': divide_result,
         'power': a ** b
     }
-    return render_template('calc.html', a=a, b=b, operations=operations)
+    return render_template('/lab2/calc.html', a=a, b=b, operations=operations)
 
 
 @lab2.route('/lab2/calc/')
@@ -158,7 +158,7 @@ books = [
 ]
 @lab2.route('/lab2/books')
 def books_list():
-    return render_template('books.html', books=books)
+    return render_template('/lab2/books.html', books=books)
 
 
 @lab2.route('/lab2/berries/')
@@ -186,6 +186,6 @@ def berries():
     {'name': 'Черноплодная рябина', 'image': 'aronia.jpg', 'description': 'Черные терпкие ягоды с вяжущим вкусом. Богата витамином P.', 'season': 'Август-Сентябрь'}
 ]
     total_berries = len(berries)
-    return render_template('berries.html', 
+    return render_template('/lab2/berries.html', 
                         berries=berries,
                         total_berries=total_berries)
