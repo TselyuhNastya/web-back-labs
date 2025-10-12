@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab3_pay.css')}}">
+{% endblock %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Оплата</h1>
+
+    <div class="price-display">
+        Сумма к оплате: <strong>{{ price }} рублей</strong>
+    </div>
+
+    <form action="/lab3/success">
+        <input type="hidden" name="price" value="{{ price }}">
+        
+        <div class="section">
+            <label>Номер банковской карты:</label>
+            <input type="text" name="card" pattern="\d{16}" placeholder="0000 0000 0000 0000" required>
+        </div>
+
+        <div class="section">
+            <label>Имя держателя карты:</label>
+            <input type="text" name="name" placeholder="IVAN IVANOV" required>
+        </div>
+
+        <div class="section">
+            <label>Номер CVV:</label>
+            <input type="text" name="cvv" size="3" pattern="\d{3}" placeholder="123" required>
+        </div>
+
+        <div class="actions">
+            <button type="submit">Оплатить {{ price }} ₽</button>
+            <a href="/lab3/order" class="button cancel">Отказаться</a>
+        </div>
+
+    </form>
+
+    <br>
+    <br>
+    <a href="/lab3/">Меню</a>
+
+{% endblock %}

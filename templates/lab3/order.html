@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab3_order.css')}}">
+{% endblock %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Заказ напитка</h1>
+
+    <form action="/lab3/pay" class="order-form">
+        
+        <div class="drink-options">
+            <label class="drink-option">
+                <input type="radio" value="cofee" name="drink" checked>
+                Кофе
+                <span class="price">120 ₽</span>
+            </label>
+            
+            <label class="drink-option">
+                <input type="radio" value="black-tea" name="drink">
+                Чёрный чай
+                <span class="price">80 ₽</span>
+            </label>
+            
+            <label class="drink-option">
+                <input type="radio" value="green-tea" name="drink">
+                Зелёный чай
+                <span class="price">70 ₽</span>
+            </label>
+        </div>
+
+        <div class="additives">
+            <h3>Добавки</h3>
+            <label class="additive">
+                <input type="checkbox" name="milk">
+                Молоко
+                <span class="price">+30 ₽</span>
+            </label>
+            <label class="additive">
+                <input type="checkbox" name="sugar">
+                Сахар
+                <span class="price">+10 ₽</span>
+            </label>
+        </div>
+
+        <br>
+        <div class="actions">
+            <button type="submit" class="order-btn">Заказать напиток</button>
+        </div>
+
+    </form>
+    <br>
+    <br>
+    <a href="/lab3/">Меню</a>
+{% endblock %}

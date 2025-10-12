@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab3_cofee.css')}}">
+{% endblock %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Спасибо за заказ!</h1>
+    
+    <div class="success-message">
+        <p>Ваш заказ успешно оплачен на сумму <strong>{{ price }} рублей</strong>.</p>
+        <p>Ожидайте доставку!</p>
+    </div>
+
+    <div>
+        <a href="/lab3/order" class="button">Сделать новый заказ</a>
+    </div>
+
+    <a href="/lab3/"Меню</a>
+{% endblock %}

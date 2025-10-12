@@ -1,0 +1,86 @@
+.order-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #e8d5c4;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid #d4c1b0;
+}
+
+.drink-options {
+    background: rgb(255, 255, 255);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.drink-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 2px solid #d4c1b0;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.drink-option:hover {
+    background: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.drink-option .price {
+    margin-left: auto;
+    background:  #e8d5c4;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.additives {
+    background: rgb(255, 255, 255);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.additive {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 2px solid #d4c1b0;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.additive:hover {
+    background: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.additive .price {
+    margin-left: auto;
+    background:  #e8d5c4;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.actions {
+    text-align: center;
+}
+
+.order-btn {
+    background: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+}
