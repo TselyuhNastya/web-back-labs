@@ -18,6 +18,7 @@ def lab():
 
     return render_template('lab3/lab3.html', name=name, age=age, name_color=name_color)
     
+
 @lab3.route('/lab3/cookie')
 def cookie():
     resp = make_response(redirect('/lab3/'))
@@ -25,6 +26,7 @@ def cookie():
     resp.set_cookie('age', '20')
     resp.set_cookie('name_color', 'magenta')
     return resp
+
 
 @lab3.route('/lab3/del_cookie')
 def del_cookie():
@@ -215,7 +217,6 @@ def result_ticket():
                          ticket_type=ticket_type, total_price=total_price,
                          base_price=base_price, shelf_price=shelf_price)
 
-# Список книг
 BOOKS = [
     {"title": "Мастер и Маргарита", "author": "Михаил Булгаков", "price": 450, "genre": "Роман", "pages": 480},
     {"title": "Преступление и наказание", "author": "Федор Достоевский", "price": 380, "genre": "Классика", "pages": 592},
@@ -244,18 +245,15 @@ def get_price_range():
     return min(prices), max(prices)
 
 def filter_books(min_price_str, max_price_str):
-    """Фильтрует книги по цене"""
     filtered_books = BOOKS.copy()
     
-    # Обрабатываем минимальную цену
     if min_price_str:
         try:
             min_price = float(min_price_str)
             filtered_books = [book for book in filtered_books if book["price"] >= min_price]
         except ValueError:
             pass
-    
-    # Обрабатываем максимальную цену
+   
     if max_price_str:
         try:
             max_price = float(max_price_str)
@@ -263,7 +261,6 @@ def filter_books(min_price_str, max_price_str):
         except ValueError:
             pass
     
-    # Если пользователь перепутал мин и макс, меняем местами
     if min_price_str and max_price_str:
         try:
             min_price = float(min_price_str)
@@ -279,11 +276,9 @@ def filter_books(min_price_str, max_price_str):
 def books_search():
     min_price_all, max_price_all = get_price_range()
     
-    # Получаем значения из куки
     min_price_cookie = request.cookies.get("min_price", "")
     max_price_cookie = request.cookies.get("max_price", "")
     
-    # Обработка сброса
     if request.method == "POST" and "reset" in request.form:
         min_price = ""
         max_price = ""
@@ -299,21 +294,17 @@ def books_search():
         response.set_cookie("max_price", "", expires=0)
         return response
     
-    # Обработка поиска
     if request.method == "POST":
         min_price = request.form.get("min_price", "").strip()
         max_price = request.form.get("max_price", "").strip()
     else:
-        # Используем значения из куки при первом заходе
         min_price = min_price_cookie
         max_price = max_price_cookie
-    
-    # Фильтрация книг
+
     filtered_books = BOOKS
     if min_price or max_price:
         filtered_books = filter_books(min_price, max_price)
     
-    # Создаем ответ (ИСПРАВЛЕНА ОПЕЧАТКА - закрыта кавычка)
     response = make_response(render_template("lab3/dop_book.html", 
                            books=filtered_books,
                            min_price=min_price,
@@ -322,7 +313,6 @@ def books_search():
                            max_price_all=max_price_all,
                            count=len(filtered_books)))
     
-    # Сохраняем в куки если был поиск
     if request.method == "POST" and "search" in request.form:
         response.set_cookie("min_price", min_price)
         response.set_cookie("max_price", max_price)
