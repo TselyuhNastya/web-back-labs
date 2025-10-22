@@ -109,14 +109,14 @@ input[type="number"] {
     box-shadow: 0 3px 10px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
-    height: 100%; /* Фиксируем высоту карточки */
+    height: 100%; 
 }
 
 .book-title {
     margin-bottom: 10px;
     font-size: 1.3em;
     line-height: 1.3;
-    min-height: 3.2em; /* Фиксируем высоту заголовка */
+    min-height: 3.2em;
     overflow: hidden;
 }
 
@@ -124,17 +124,56 @@ input[type="number"] {
     color: #666;
     margin-bottom: 8px;
     font-size: 0.95em;
-    min-height: 1.2em; /* Фиксируем высоту строк */
+    min-height: 1.2em; 
 }
 
 .book-price {
     color: #28a745;
     font-size: 1.4em;
     font-weight: bold;
-    margin-top: auto; /* Прижимаем цену к низу */
+    margin-top: auto; 
     text-align: right;
-    min-width: 120px; /* Фиксируем ширину */
-    align-self: flex-end; /* Выравниваем по правому краю */
+    min-width: 120px; 
+    align-self: flex-end; 
 }
 
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.actions button {
+    padding: 10px 20px;
+    border: 2px solid;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.actions button[name="search"] {
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.actions button[name="search"]:hover {
+    background: #4CAF50;
+    color: white;
+    transform: scale(1.05);
+}
+
+.actions button[name="reset"] {
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.actions button[name="reset"]:hover {
+    background: #f44336;
+    color: white;
+    transform: scale(1.05);
+}
 

@@ -12,42 +12,32 @@
         <div class="price-inputs">
             <div class="input-group">
                 <label for="min_price">Минимальная цена:</label>
-                <input type="number" id="min_price" name="min_price" 
-                       value="{{ min_price }}" 
-                       placeholder="{{ '%.2f'|format(min_price_all) }}" 
-                       min="0" step="0.01">
+                <input type="number" id="min_price" name="min_price" value="{{ min_price }}" 
+                placeholder="{{ min_price_all }}" min="0">
             </div>
             
             <div class="input-group">
                 <label for="max_price">Максимальная цена:</label>
-                <input type="number" id="max_price" name="max_price" 
-                       value="{{ max_price }}" 
-                       placeholder="{{ '%.2f'|format(max_price_all) }}" 
-                       min="0" step="0.01">
+                <input type="number" id="max_price" name="max_price" value="{{ max_price }}" 
+                placeholder="{{ max_price_all }}" min="0">
             </div>
         </div>
         
         <div class="actions">
-            <button type="submit" name="search" class="btn btn-primary">Искать</button>
-            <button type="submit" name="reset" class="btn btn-secondary">Сбросить</button>
+            <button type="submit" name="search">Искать</button>
+            <button type="submit" name="reset">Сбросить</button>
         </div>
     </form>
 
-    <div class="results-info">
-        {% if count == 1 %}
-            Найдена 1 книга
-        {% elif 2 <= count <= 4 %}
-            Найдено {{ count }} книги
-        {% else %}
-            Найдено {{ count }} книг
-        {% endif %}
-    </div>
-
     {% if count == 0 %}
+    <div class="results-container">
         <div class="no-results">
             Не найдено ни одной книги по заданным критериям
         </div>
+    </div>
     {% else %}
+    <div class="results-container">
+        <div class="results-info">Найдено {{ count }} книг</div>
         <div class="books-grid">
             {% for book in books %}
             <div class="book-card">
@@ -59,6 +49,7 @@
             </div>
             {% endfor %}
         </div>
+    </div>
     {% endif %}
 
     <br>

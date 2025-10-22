@@ -17,16 +17,6 @@ def lab():
         age = f"{age} лет"
 
     return render_template('lab3/lab3.html', name=name, age=age, name_color=name_color)
-    
-
-@lab3.route('/lab3/cookie')
-def cookie():
-    resp = make_response(redirect('/lab3/'))
-    resp.set_cookie('name', 'Alex', max_age=5)
-    resp.set_cookie('age', '20')
-    resp.set_cookie('name_color', 'magenta')
-    return resp
-
 
 @lab3.route('/lab3/del_cookie')
 def del_cookie():
@@ -57,12 +47,6 @@ def order():
     return render_template('lab3/order.html')
 
 
-@lab3.route('/lab3/success')
-def success():
-    price = request.args.get('price', 0)
-    return render_template('lab3/success.html', price=price)
-
-
 @lab3.route('/lab3/pay')
 def pay():
     price = 0
@@ -80,6 +64,13 @@ def pay():
         price += 10
 
     return render_template('lab3/pay.html', price=price)
+
+
+@lab3.route('/lab3/success')
+def success():
+    price = request.args.get('price', 0)
+    return render_template('lab3/success.html', price=price)
+
 
 @lab3.route("/lab3/settings")
 def settings():
@@ -116,7 +107,6 @@ def settings():
 @lab3.route("/lab3/settings/reset")
 def reset_settings():
     resp = make_response(redirect('/lab3/settings'))
-    
     resp.delete_cookie('color')
     resp.delete_cookie('bg_color')
     resp.delete_cookie('font_size')
@@ -138,10 +128,10 @@ def ticket_form():
     insurance = request.args.get('insurance', '')
     
     return render_template('lab3/ticket.html', errors=errors,
-                         fio=fio, age=age,
-                         departure=departure, destination=destination,
-                         date=date, shelf=shelf,
-                         bedding=bedding, luggage=luggage, insurance=insurance)
+                        fio=fio, age=age,
+                        departure=departure, destination=destination,
+                        date=date, shelf=shelf,
+                        bedding=bedding, luggage=luggage, insurance=insurance)
 
 
 @lab3.route('/lab3/result_ticket')
@@ -173,13 +163,13 @@ def result_ticket():
     
     if errors:
         return render_template('lab3/ticket.html',
-                             errors=errors,
-                             fio=fio, age=age,
-                             departure=departure, destination=destination,
-                             date=date, shelf=shelf,
-                             bedding=bedding,
-                             luggage=luggage,
-                             insurance=insurance)
+                            errors=errors,
+                            fio=fio, age=age,
+                            departure=departure, destination=destination,
+                            date=date, shelf=shelf,
+                            bedding=bedding,
+                            luggage=luggage,
+                            insurance=insurance)
     
     age_int = int(age)
     if age_int < 18:
@@ -189,7 +179,7 @@ def result_ticket():
         base_price = 1000
         ticket_type = "Взрослый билет"
     
-    # Расчет стоимости с разбивкой
+    #Доплаты
     shelf_price = 100 if shelf in ['lower', 'lower_side'] else 0
     additional_price = 0
     
@@ -210,12 +200,12 @@ def result_ticket():
     }
     
     return render_template('lab3/result_ticket.html',
-                         fio=fio, age=age,
-                         departure=departure, destination=destination,
-                         date=date, shelf_name=shelf_names[shelf],
-                         bedding=bedding, luggage=luggage, insurance=insurance,
-                         ticket_type=ticket_type, total_price=total_price,
-                         base_price=base_price, shelf_price=shelf_price)
+                        fio=fio, age=age,
+                        departure=departure, destination=destination,
+                        date=date, shelf_name=shelf_names[shelf],
+                        bedding=bedding, luggage=luggage, insurance=insurance,
+                        ticket_type=ticket_type, total_price=total_price,
+                        base_price=base_price, shelf_price=shelf_price)
 
 BOOKS = [
     {"title": "Мастер и Маргарита", "author": "Михаил Булгаков", "price": 450, "genre": "Роман", "pages": 480},
@@ -275,9 +265,12 @@ def filter_books(min_price_str, max_price_str):
 @lab3.route('/lab3/books', methods=["GET", "POST"])
 def books_search():
     min_price_all, max_price_all = get_price_range()
-    
     min_price_cookie = request.cookies.get("min_price", "")
     max_price_cookie = request.cookies.get("max_price", "")
+    
+    min_price = min_price_cookie
+    max_price = max_price_cookie
+    filtered_books = BOOKS
     
     if request.method == "POST" and "reset" in request.form:
         min_price = ""
@@ -295,13 +288,9 @@ def books_search():
         return response
     
     if request.method == "POST":
-        min_price = request.form.get("min_price", "").strip()
-        max_price = request.form.get("max_price", "").strip()
-    else:
-        min_price = min_price_cookie
-        max_price = max_price_cookie
+        min_price = request.form.get("min_price", "")
+        max_price = request.form.get("max_price", "")
 
-    filtered_books = BOOKS
     if min_price or max_price:
         filtered_books = filter_books(min_price, max_price)
     
