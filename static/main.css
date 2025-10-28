@@ -116,3 +116,15 @@ p {
     color: red;
 }
 
+.error-message {
+    color: #d32f2f;
+    background-color: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-weight: bold;
+    font-style: italic;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 250px;
+}

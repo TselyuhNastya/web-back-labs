@@ -19,13 +19,26 @@
         <form method="post">
             <div>
                 <label for="login">Пользователь:</label>
-                <input type="text" id="login" name="login">
+                <input type="text" id="login" name="login" value="{{ login_value or '' }}">
             </div>
             <div>
                 <label for="password">Пароль</label>
                 <input type="password" id="password" name="password">
             </div>
-            <div>{{ error }}</div>
+            <div>
+                <label>Пол:</label>
+                <div>
+                    <input type="radio" id="male" name="gender" value="male" {% if gender_value == 'male' %}checked{% endif %}>
+                    <label for="male" style="display: inline; margin-left: 5px;">Мужский</label>
+                </div>
+                <div>
+                    <input type="radio" id="female" name="gender" value="female" {% if gender_value == 'female' %}checked{% endif %}>
+                    <label for="female" style="display: inline; margin-left: 5px;">Женский</label>
+                </div>
+            </div>
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
             <br>
             <div>
                 <button type="submit">Войти</button>
