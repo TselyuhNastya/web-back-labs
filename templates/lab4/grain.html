@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab4/grain.css')}}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <h1> Заказ зерна</h1>
+    <h2>Выберите зерно и укажите вес</h2>
+    
+    <form method="post">
+        <div>
+            <label>Вид зерна:</label>
+            <div class="grain-options">
+                <div>
+                    <input type="radio" id="barley" name="grain" value="barley" {% if grain_type == 'barley' %}checked{% endif %}>
+                    <label for="barley">Ячмень (12 000 руб/т)</label>
+                </div>
+                <div>
+                    <input type="radio" id="oats" name="grain" value="oats" {% if grain_type == 'oats' %}checked{% endif %}>
+                    <label for="oats">Овёс (8 500 руб/т)</label>
+                </div>
+                <div>
+                    <input type="radio" id="wheat" name="grain" value="wheat" {% if grain_type == 'wheat' %}checked{% endif %}>
+                    <label for="wheat">Пшеница (9 000 руб/т)</label>
+                </div>
+                <div>
+                    <input type="radio" id="rye" name="grain" value="rye" {% if grain_type == 'rye' %}checked{% endif %}>
+                    <label for="rye">Рожь (15 000 руб/т)</label>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <label for="weight">Вес (тонны):</label>
+            <input type="number" id="weight" name="weight" 
+                   value="{{ weight or '' }}" 
+                   placeholder="Укажите вес"
+                   step="0.1">
+        </div>
+        
+        {% if error %}
+        <div class="error-messag"> {{ error }}</div>
+        {% endif %}
+        
+        {% if success %}
+        <div class="success-message"> {{ success }}</div>
+        {% endif %}
+        
+        <br>
+
+        <div class="button-group">
+            <button type="submit">Оформить заказ</button>
+            <br>
+            <br>
+            <a href="/lab4/grain" class="reset-button">Сброс</a>
+        </div>
+    </form>
+    
+   <br>
+   <br>
+    <a href="/lab4/">Меню</a>
+   
+{% endblock %}

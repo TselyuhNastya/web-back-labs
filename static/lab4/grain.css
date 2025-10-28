@@ -1,0 +1,118 @@
+/* Заголовки */
+h1 {
+    color: #693611;
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.2);
+    font-weight: bold;
+}
+
+h2 {
+    color: #693611;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 30px;
+    font-size: 1.3em;
+}
+
+/* Стили для выбора зерна */
+.grain-options {
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #d4c1b0;
+    margin-bottom: 20px;
+}
+
+.grain-options div {
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.grain-options div:hover {
+    background: rgba(222, 184, 135, 0.3);
+    transform: translateX(5px);
+}
+
+.grain-options label {
+    font-weight: bold;
+    color: #693611;
+    font-size: 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #8B4513;
+    font-size: 16px;
+}
+
+input[type="number"] {
+    padding: 12px 15px;
+    border: 2px solid #d4c1b0;
+    border-radius: 15px;
+    font-size: 16px;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+/* Сообщения об ошибках и успехе */
+.error-messag {
+    color: #f20f0f;
+    border: 2px solid #f20f0f;
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.2);
+    text-align: center;
+}
+
+.success-message {
+    color: #0c781f;
+    border: 2px solid #0c781f;
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(139, 0, 0, 0.2);
+    text-align: center;
+}
+
+
+button[type="submit"] {
+    padding: 15px 30px;
+    background: green;
+    color: white;
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+.reset-button {
+    padding: 15px 30px;
+    background: grey;
+    color: white;
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+}
+
+
+/* Декоративные элементы зерна */
+.grain-options div::before {
+    content: '🌾';
+    margin-right: 10px;
+    font-size: 18px;
+}
+
