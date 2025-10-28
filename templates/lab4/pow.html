@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<div>
+    <h1>Возведение в степень</h1>
+    
+    {% if error %}
+        <div>{{ error }}</div>
+    {% else %}
+        <div>
+            {{ x1 }}<sup>{{ x2 }}</sup> = {{ result }}
+        </div>
+    {% endif %}
+    
+    <br>
+    <a href="{{ url_for('lab4.pow_form') }}">Вернуться к возведению в степень</a>
+</div>
+{% endblock %}

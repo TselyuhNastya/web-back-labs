@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<div>
+    <h1>Суммирование чисел</h1>
+    
+    <form method="post" action="/lab4/sum">
+        <div>
+            <input type="number" name="x1" placeholder="0">
+            <span>+</span>
+            <input type="number" name="x2" placeholder="0">
+            <input type="submit" value="=">
+        </div>
+    </form>
+    <br>
+    <div style="color: #666; font-style: italic;">
+        Пустые поля считаются как 0
+    </div>
+</div>
+<br>
+<br>
+<a href="/lab4/">Меню</a>
+{% endblock %}
