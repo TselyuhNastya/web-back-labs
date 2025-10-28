@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<div>
+    <h1>Посадка деревьев</h1>
+    
+    <div>
+        Посажено деревьев: {{ tree_count }}
+    </div>
+    
+    <br>
+
+    <form method="post">
+        <div>
+            <button type="submit" name="operation" value="plant" 
+                    {% if tree_count >= max_trees %}disabled{% endif %}>
+                Посадить дерево
+            </button>
+            <button type="submit" name="operation" value="cut" 
+                    {% if tree_count <= 0 %}disabled{% endif %}>
+                Срубить дерево
+            </button>
+        </div>
+    </form>
+    
+    <br>
+
+    {% if tree_count >= max_trees %}
+    <div>
+        <i>Достигнуто максимальное количество деревьев!</i>
+    </div>
+    {% elif tree_count <= 0 %}
+    <div>
+        <i>Нельзя срубить дерево - их нет!</i>
+    </div>
+    {% endif %}
+        <br>
+    <br>
+    <a href="/lab4/">Меню</a>
+   </div>
+{% endblock %}
