@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab4/fridge.css')}}">
+{% endblock %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Холодильник</h1>
+    <h2>Установите температуру охлаждения</h2>
+    
+    <form method="post">
+        <div>
+            <label for="temperature">Температура (°C):</label>
+            <input type="number" id="temperature" name="temperature" 
+                   value="{{ temperature or '' }}" 
+                   placeholder="от -12°C до -1°C">
+        </div>
+        
+        {% if error %}
+        <div class="error-messag">{{ error }}</div>
+        {% endif %}
+        
+        {% if message %}
+        <div class="success-message">
+            {{ message }}
+            <div class="snowflakes">
+                {% for i in range(snowflakes) %}
+                <span class="snowflake">❄️</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="button-group">
+            <button type="submit">Установить температуру</button>
+            <button type="reset">Сброс</button>
+        </div>
+    </form>
+    
+    <br>
+    <br>
+    
+    <a href="/lab4/" class="back-link">Меню</a>
+    
+{% endblock %}

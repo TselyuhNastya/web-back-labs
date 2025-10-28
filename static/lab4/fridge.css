@@ -1,0 +1,101 @@
+.error-messag {
+    color: #ff4757;
+    border: 2px solid #ff4757;
+    border-radius: 5px;
+    padding: 15px 20px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    text-align: center;
+}
+
+.success-message {
+    color: #2ed573;
+    border: 2px solid #2ed573;
+    border-radius: 5px;
+    padding: 15px 20px;
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+    text-align: center;
+}
+
+.snowflakes {
+    margin-top: 10px;
+    font-size: 28px;
+    gap: 10px;
+}
+
+.button-group {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.button-group button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.button-group button[type="submit"] {
+    background: blue;
+    color: white;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.button-group button[type="reset"] {
+    background: grey;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button-group button:hover {
+    transform: translateY(-3px);
+}
+
+input[type="number"] {
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 18px;
+    width: 250px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+input[type="number"]:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    transform: scale(1.05);
+    outline: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #000000;
+    font-size: 16px;
+}
+
+h1 {
+    color: #000000;
+    text-align: center;
+}
+
+h2 {
+    color: #636e72;
+    text-align: center;
+    font-style: italic;          
+}
+
