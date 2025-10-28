@@ -25,6 +25,7 @@ def cookie():
     resp.set_cookie('age', '20')
     resp.set_cookie('name_color', 'magenta')
     return resp
+
     
 @lab3.route('/lab3/del_cookie')
 def del_cookie():
@@ -155,7 +156,6 @@ def result_ticket():
     luggage = request.args.get('luggage') == 'on'
     insurance = request.args.get('insurance') == 'on'
     
-    # Проверки
     if not fio:
         errors['fio'] = 'Заполните ФИО'
     if not age:
