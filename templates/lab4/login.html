@@ -5,48 +5,51 @@
 
 {# основной контент: #}
 {% block main %}
-
+    <h1>Вход в систему</h1>
+    
     {% if authorized %}
-        <h1>Добро пожаловать, {{ login }}!</h1>
-        <div>
-            <form action="/lab4/logout" method="post">
-                <button>Выход</button>
-            </form>
-        </div>
+    <div style="color: green;">
+        <p>Добро пожаловать, {{ login }}! Вы успешно вошли в систему.</p>
+    </div>
+    <div>
+        <a href="/lab4/users">Перейти к списку пользователей</a>
+    </div>
     {% else %}
-        <h1>Вход</h1>
-        <h2>Пожалуйста, авторизуйтесь</h2>
-        <form method="post">
+    <form method="post">
+        <div>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" value="{{ login_value or '' }}"
+        </div>
+        
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        
+        <div>
+            <label>Пол:</label>
             <div>
-                <label for="login">Пользователь:</label>
-                <input type="text" id="login" name="login" value="{{ login_value or '' }}">
+                <input type="radio" id="male" name="gender" value="male" {% if gender_value == 'male' %}checked{% endif %}>
+                <label for="male">Мужской</label>
             </div>
             <div>
-                <label for="password">Пароль</label>
-                <input type="password" id="password" name="password">
+                <input type="radio" id="female" name="gender" value="female" {% if gender_value == 'female' %}checked{% endif %}>
+                <label for="female">Женский</label>
             </div>
-            <div>
-                <label>Пол:</label>
-                <div>
-                    <input type="radio" id="male" name="gender" value="male" {% if gender_value == 'male' %}checked{% endif %}>
-                    <label for="male" style="display: inline; margin-left: 5px;">Мужский</label>
-                </div>
-                <div>
-                    <input type="radio" id="female" name="gender" value="female" {% if gender_value == 'female' %}checked{% endif %}>
-                    <label for="female" style="display: inline; margin-left: 5px;">Женский</label>
-                </div>
-            </div>
-            {% if error %}
-            <div class="error-message">{{ error }}</div>
-            {% endif %}
-            <br>
-            <div>
-                <button type="submit">Войти</button>
-                <button type="reset">Отмена</button>
-            </div>
-        </form>
+        </div>
+        
+        {% if error %}
+        <div style="color: red; margin: 10px 0;">{{ error }}</div>
+        {% endif %}
+        
+        <div>
+            <button type="submit">Войти</button>
+            <button type="reset">Отмена</button>
+        </div>
+    </form>
+    <br>
+    Нет аккаунта? <a href="/lab4/register">Зарегистрируйтесь</a>
     {% endif %}
-<br>
-<br>
-<a href="/lab4/">Меню</a>
+    <br>
+    <a href="/lab4/">Меню</a>
 {% endblock %}

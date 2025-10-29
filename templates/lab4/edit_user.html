@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+    <h1>Редактирование профиля</h1>
+    
+    <form method="post">
+        <div>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" value="{{ user.login }}" required>
+        </div>
+        
+        <div>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+        </div>
+        
+        <div>
+            <label>Пол:</label>
+            <div>
+                <input type="radio" id="male" name="gender" value="male" {% if user.gender == 'male' %}checked{% endif %} required>
+                <label for="male">Мужской</label>
+            </div>
+            <div>
+                <input type="radio" id="female" name="gender" value="female" {% if user.gender == 'female' %}checked{% endif %} required>
+                <label for="female">Женский</label>
+            </div>
+        </div>
+        
+        <div>
+            <label for="password">Новый пароль (оставьте пустым, если не хотите менять):</label>
+            <input type="password" id="password" name="password">
+        </div>
+        
+        <div>
+            <label for="password_confirm">Подтверждение нового пароля:</label>
+            <input type="password" id="password_confirm" name="password_confirm">
+        </div>
+        
+        {% if error %}
+        <div style="color: red; margin: 10px 0;">{{ error }}</div>
+        {% endif %}
+        
+        {% if success %}
+        <div style="color: green; margin: 10px 0;">{{ success }}</div>
+        {% endif %}
+        
+        <div>
+            <button type="submit">Сохранить изменения</button>
+            <br>
+            <br>
+            <a href="/lab4/users">Назад к списку пользователей</a>
+        </div>
+    </form>
+    
+    <a href="/lab4/">Меню</a>
+{% endblock %}
