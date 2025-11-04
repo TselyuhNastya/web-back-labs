@@ -13,12 +13,18 @@
     </div>
     <div>
         <a href="/lab4/users">Перейти к списку пользователей</a>
+        <br>
+        <form action="/lab4/logout" method="post">
+            <button type="submit" style="background: none; border: none; color: #dc3545; text-decoration: underline; cursor: pointer; padding: 0; font-size: 14px;">
+                Выход из системы
+            </button>
+        </form>
     </div>
     {% else %}
     <form method="post">
         <div>
             <label for="login">Логин:</label>
-            <input type="text" id="login" name="login" value="{{ login_value or '' }}"
+            <input type="text" id="login" name="login" value="{{ login_value or '' }}">
         </div>
         
         <div>

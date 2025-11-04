@@ -10,22 +10,22 @@
     <form method="post">
         <div>
             <label for="login">Логин:</label>
-            <input type="text" id="login" name="login" value="{{ user.login }}" required>
+            <input type="text" id="login" name="login" value="{{ user.login }}">
         </div>
         
         <div>
             <label for="name">Имя:</label>
-            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+            <input type="text" id="name" name="name" value="{{ user.name }}">
         </div>
         
         <div>
             <label>Пол:</label>
             <div>
-                <input type="radio" id="male" name="gender" value="male" {% if user.gender == 'male' %}checked{% endif %} required>
+                <input type="radio" id="male" name="gender" value="male" {% if user.gender == 'male' %}checked{% endif %}>
                 <label for="male">Мужской</label>
             </div>
             <div>
-                <input type="radio" id="female" name="gender" value="female" {% if user.gender == 'female' %}checked{% endif %} required>
+                <input type="radio" id="female" name="gender" value="female" {% if user.gender == 'female' %}checked{% endif %}>
                 <label for="female">Женский</label>
             </div>
         </div>
