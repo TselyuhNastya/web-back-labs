@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<div class="lab5-main">
+   
+    <h1>Регистрация</h1>
+    
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    <form method="post" class="lab5-form">
+        <div class="form-group">
+            <label>
+                Логин: 
+                <input type="text" name="login" required maxlength="30">
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                Пароль:
+                <input type="password" name="password" required>
+            </label>
+        </div>
+        
+        <br>
+
+        <button type="submit" class="lab5-btn">Зарегистрироваться</button>
+    </form>
+    
+    <br>
+
+    <div class="lab5-links">
+        <a href="/lab5/" class="lab5-btn">Меню</a>
+    </div>
+</div>
+{% endblock %}
