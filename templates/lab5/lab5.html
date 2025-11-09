@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/menu.css')}}">
+{% endblock %}
+
+{# номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{# основной контент: #}
+{% block main %}
+<div class="lab5-main">
+    <div class="lab5-title">
+        Flask и БД
+    </div>
+
+    <div class="lab5-header">База знаний</div>
+
+    <div class="lab5-nav">
+        <div class="lab5-buttons">
+            <a href="/lab5/list" class="lab5-btn">Список статей</a>
+            <a href="/lab5/create" class="lab5-btn">Создать статью</a>
+            <a href="/lab5/login" class="lab5-btn">Войти</a>
+            <a href="/lab5/register" class="lab5-btn">Регистрация</a>
+        </div>
+        <div class="lab5-user">
+            {% if login %}
+                {{ login }}
+            {% else %}
+                Anonymous
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
