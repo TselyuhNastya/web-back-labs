@@ -50,24 +50,23 @@ def register():
     #подключаемся к БД
     conn, cur = db_connect()
     
-    #проверка существования пользователя
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT login FROM users WHERE login=%s;", (login,))
     else:
         cur.execute("SELECT login FROM users WHERE login=?;", (login,))
-    
+       
     if cur.fetchone():
         db_close(conn, cur)
         return render_template('lab5/register.html', error='Такой пользователь уже существует')
 
     password_hash = generate_password_hash(password) #хеширование, чтоб не взломали
-    
+
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO users (login, password) VALUES (%s, %s);", (login, password_hash))
     else:
         cur.execute("INSERT INTO users (login, password) VALUES (?, ?);", (login, password_hash))
     
-    db_close(conn, cur)
+        db_close(conn, cur)
     
     return render_template('lab5/success.html', login=login)
 
@@ -84,13 +83,13 @@ def login():
         return render_template('lab5/login.html', error='Заполните поля')
     
     conn, cur = db_connect()
-    
+
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE login=%s;", (login,))
     else:
         cur.execute("SELECT * FROM users WHERE login=?;", (login,))
     
-    user = cur.fetchone()
+        user = cur.fetchone()
     
     if not user:
         db_close(conn, cur)
@@ -129,12 +128,12 @@ def create():
         return render_template('lab5/create_article.html', error='Заполните название и текст статьи')
 
     conn, cur = db_connect()
-    
+
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE login=%s;", (login, ))
     else:
         cur.execute("SELECT * FROM users WHERE login=?;", (login, ))
-    
+        
     user = cur.fetchone()
     login_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
 
@@ -144,10 +143,9 @@ def create():
     else:
         cur.execute("INSERT INTO articles(user_id, title, article_text) VALUES (?, ?, ?);", 
                    (login_id, title, article_text))
-    
+            
     db_close(conn, cur)
     return redirect('/lab5')
-
 
 @lab5.route('/lab5/list')
 def list():
@@ -157,19 +155,19 @@ def list():
     
     conn, cur = db_connect()
     
-    if current_app.config['DB_TYPE'] == 'postgres':
+     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT id FROM users WHERE login=%s;", (login,))
     else:
         cur.execute("SELECT id FROM users WHERE login=?;", (login,))
-    
+       
     user = cur.fetchone()
     login_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
     
-    if current_app.config['DB_TYPE'] == 'postgres':
+     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM articles WHERE user_id=%s;", (login_id,))
     else:
         cur.execute("SELECT * FROM articles WHERE user_id=?;", (login_id,))
-    
+       
     articles = cur.fetchall()
     
     db_close(conn, cur)
