@@ -1,0 +1,107 @@
+.lab5-main {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #9b59b6;
+    padding-bottom: 10px;
+}
+
+/* Стили для формы */
+.lab5-form {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Стили для полей ввода */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+/* Стили для кнопки регистрации */
+button[type="submit"] {
+    background: #9b59b6;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 250px;
+}
+
+button[type="submit"]:hover {
+    background: #8e44ad;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Стили для сообщения об ошибке */
+.error {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 5px solid #c0392b;
+}
+
+/* Стили для кнопки меню */
+.lab5-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #95a5a6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+}
+
+.lab5-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Контейнер для ссылок */
+.lab5-links {
+    text-align: center;
+}

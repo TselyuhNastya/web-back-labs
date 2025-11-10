@@ -1,0 +1,82 @@
+h1 {
+    color: #27ae60;
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #27ae60;
+    padding-bottom: 15px;
+    font-size: 2.5em;
+}
+
+h1 i {
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+h1 i::before {
+    font-style: normal;
+    font-size: 0.9em;
+}
+
+p {
+    text-align: center;
+    font-size: 1.3em;
+    margin: 30px 0;
+    line-height: 1.6;
+    padding: 20px;
+    background: #d4edda;
+    border-radius: 10px;
+    border-left: 5px solid #27ae60;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p strong {
+    color: #155724;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Контейнер для кнопок */
+.button-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 40px auto;
+    flex-wrap: wrap;
+}
+
+/* Стили для кнопок */
+.lab5-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 150px;
+}
+
+.lab5-btn:hover {
+    background: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Стиль для кнопки выхода */
+.logout-btn {
+    background: #e74c3c;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+

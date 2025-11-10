@@ -1,17 +1,35 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/articles.css')}}">
+{% endblock %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 5{% endblock %}
 
-{# основной контент: #}
 {% block main %}
     <h1>Статьи</h1>
 
-    {% for article in articles %}
-        <h2>{{ article['title'] }}</h2>
-        <blockquote>{{ article['article_text'] }}</blockquote>
-    {% endfor %}
-    <div style="margin-top: 20px;">
+    {% if articles %}
+        {% for article in articles %}
+            <div class="article-item">
+                <h2>{{ article['title'] }}</h2>
+                <blockquote>{{ article['article_text'] }}</blockquote>
+                <div class="article-actions">
+                    <a href="/lab5/edit/{{ article['id'] }}" class="lab5-btn edit-btn">Редактировать</a>
+                    <a href="/lab5/delete/{{ article['id'] }}" class="lab5-btn delete-btn" onclick="return confirm('Удалить статью?')">Удалить</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-articles">
+            <i>Пока здесь пусто</i>
+            <br>
+            <a href="/lab5/create"> Исправим это?</a>
+        </div>
+    {% endif %}
+
+    <br>
+    
+    <div>
         <a href="/lab5/" class="lab5-btn">Меню</a>
     </div>
 {% endblock %}

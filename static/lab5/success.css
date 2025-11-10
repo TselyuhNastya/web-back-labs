@@ -1,0 +1,102 @@
+.lab5-main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+/* Стили для иконки и текста */
+i {
+    font-size: 1.3em;
+    color: #27ae60;
+    font-style: italic;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Стили для сообщения об успехе */
+.success-message {
+    background: #d4edda;
+    border: 2px solid #c3e6cb;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.success-message p {
+    margin: 15px 0;
+    font-size: 1.1em;
+    color: #155724;
+    line-height: 1.6;
+}
+
+.success-message strong {
+    color: #0f5132;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Стили для кнопок */
+.lab5-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 10px;
+    background: #27ae60;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    min-width: 150px;
+}
+
+.lab5-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Специфичные стили для кнопки "Войти" */
+.lab5-btn:first-of-type {
+    background: #3498db;
+}
+
+.lab5-btn:first-of-type:hover {
+    background: #2980b9;
+}
+
+/* Стили для кнопки "Меню" */
+.lab5-btn:last-of-type {
+    background: #95a5a6;
+}
+
+.lab5-btn:last-of-type:hover {
+    background: #7f8c8d;
+}
+
+/* Контейнер для кнопок */
+div[style*="margin-top"] {
+    text-align: center;
+    margin-top: 30px !important;
+}
+
+/* Декоративные элементы */
+.success-message::before {
+    content: "✓";
+    font-size: 3em;
+    color: #27ae60;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Дополнительные визуальные улучшения */
+.lab5-main {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    margin-top: 20px;
+}
+

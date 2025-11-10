@@ -1,11 +1,16 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/create_articles.css')}}">
+{% endblock %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 5{% endblock %}
 
-{# основной контент: #}
 {% block main %}
     <h1>Создание статьи</h1>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
 
     <form method="post">
         <div>
@@ -16,7 +21,10 @@
         </div>
 
         <div>
-            <textarea name="article_text"></textarea>
+            <label>
+                    Текст статьи:
+                    <textarea name="article_text"></textarea>
+            </label>
         </div>
 
         <div>

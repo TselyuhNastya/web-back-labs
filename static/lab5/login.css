@@ -1,0 +1,114 @@
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+/* Стили для формы */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+form div {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Стили для полей ввода */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+/* Стили для кнопки входа */
+button[type="submit"] {
+    background: #3498db;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Стили для сообщения об ошибке */
+div[style*="color: red"] {
+    background: #e74c3c;
+    color: white !important;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 5px solid #c0392b;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Стили для кнопки меню */
+.lab5-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #95a5a6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+}
+
+.lab5-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Контейнер для кнопки меню */
+div:not(form div) {
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* Дополнительные визуальные улучшения */
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: #95a5a6;
+    font-style: italic;
+}
+

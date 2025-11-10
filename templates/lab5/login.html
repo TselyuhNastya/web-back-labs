@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/login.css')}}">
+{% endblock %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 5{% endblock %}
 
-{# основной контент: #}
 {% block main %}
+<div class="lab5-main">
     <h1>Вход в систему</h1>
     
     {% if error %}
@@ -25,7 +27,7 @@
         </div>
         
         <br>
-        
+
         <button type="submit">Вход</button>
     </form>
 

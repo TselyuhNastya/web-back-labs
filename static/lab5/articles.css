@@ -1,0 +1,113 @@
+.article-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.article-item h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
+}
+
+.article-item blockquote {
+    background: white;
+    border-left: 4px solid #3498db;
+    margin: 15px 0;
+    padding: 15px 20px;
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+}
+
+.article-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Стили для кнопок */
+.lab5-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.lab5-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Конкретные стили для кнопок действий */
+.edit-btn {
+    background: #3498db;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #2980b9;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+/* Стили для пустого состояния */
+.no-articles {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    border: 2px dashed #bdc3c7;
+    border-radius: 10px;
+    color: #7f8c8d;
+}
+
+.no-articles i {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.no-articles a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.no-articles a:hover {
+    background: #3498db;
+    color: white;
+}
+
+/* Стиль для кнопки меню */
+.lab5-btn:not(.edit-btn):not(.delete-btn) {
+    background: #95a5a6;
+    color: white;
+}
+
+.lab5-btn:not(.edit-btn):not(.delete-btn):hover {
+    background: #7f8c8d;
+}
+
+  

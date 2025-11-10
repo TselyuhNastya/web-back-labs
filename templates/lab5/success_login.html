@@ -1,11 +1,18 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/success_login.css')}}">
+{% endblock %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 5{% endblock %}
 
-{# основной контент: #}
 {% block main %}
-    <h1><i>Успешный вход!</i></h1>
-    <p>Пользователь <strong>{{ login }}</strong> успешно вошёл в систему!</p>
-    <a href="/lab5/">Меню</a>
+
+<h1><i>Успешный вход!</i></h1>
+<p>Пользователь <strong>{{ login }}</strong> успешно вошёл в систему!</p>
+
+<div class="button-container">
+    <a href="/lab5/" class="lab5-btn">Меню</a>
+    <a href="/lab5/logout" class="lab5-btn logout-btn">Выйти</a>
+</div>
+
 {% endblock %}
