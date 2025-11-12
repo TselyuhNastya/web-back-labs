@@ -32,7 +32,7 @@ def db_connect():
     return conn, cur
 
 def db_close(conn, cur):
-    conn.commit()
+    # УБРАЛ conn.commit() - он не нужен для SELECT запросов
     cur.close()
     conn.close()
 
@@ -66,6 +66,7 @@ def register():
     else:
         cur.execute("INSERT INTO users (login, password) VALUES (?, ?);", (login, password_hash))
         
+    conn.commit()
     db_close(conn, cur)
     
     return render_template('lab5/success.html', login=login)
@@ -145,6 +146,7 @@ def create():
         cur.execute("INSERT INTO articles(user_id, title, article_text) VALUES (?, ?, ?);", 
                    (login_id, title, article_text))
             
+    conn.commit()
     db_close(conn, cur)
     return redirect('/lab5')
 
@@ -213,6 +215,7 @@ def edit_article(article_id):
         cur.execute("UPDATE articles SET title=?, article_text=? WHERE id=?;", 
                    (title, article_text, article_id))
     
+    conn.commit()
     db_close(conn, cur)
     return redirect('/lab5/list')
 
@@ -239,5 +242,6 @@ def delete_article(article_id):
         else:
             cur.execute("DELETE FROM articles WHERE id=?;", (article_id,))
     
+    conn.commit()
     db_close(conn, cur)
     return redirect('/lab5/list')
