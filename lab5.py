@@ -66,7 +66,6 @@ def register():
     else:
         cur.execute("INSERT INTO users (login, password) VALUES (?, ?);", (login, password_hash))
         
-    conn.commit()
     db_close(conn, cur)
     
     return render_template('lab5/success.html', login=login)
