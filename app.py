@@ -12,7 +12,7 @@ from lab5 import lab5
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
-app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
+app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'splite')
 
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
