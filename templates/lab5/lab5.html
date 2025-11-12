@@ -17,10 +17,17 @@
 
     <div class="lab5-nav">
         <div class="lab5-buttons">
-            <a href="/lab5/list" class="lab5-btn">Список статей</a>
+            <a href="/lab5/list" class="lab5-btn">Мои статьи</a>
+            <a href="/lab5/public" class="lab5-btn">Публичные статьи</a>
             <a href="/lab5/create" class="lab5-btn">Создать статью</a>
-            <a href="/lab5/login" class="lab5-btn">Войти</a>
-            <a href="/lab5/register" class="lab5-btn">Регистрация</a>
+            <a href="/lab5/users" class="lab5-btn">Все пользователи</a>
+            {% if login %}
+                <a href="/lab5/profile" class="lab5-btn">Редактирование профиля</a>
+                <a href="/lab5/logout" class="lab5-btn">Выйти</a>
+            {% else %}
+                <a href="/lab5/login" class="lab5-btn">Войти</a>
+                <a href="/lab5/register" class="lab5-btn">Регистрация</a>
+            {% endif %}
         </div>
         <div class="lab5-user">
             {% if login %}

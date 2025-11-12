@@ -12,18 +12,32 @@
         <div class="error">{{ error }}</div>
     {% endif %}
 
-    <form method="post">
+     <form method="post">
         <div>
             <label>
                 Название статьи:
-                <input type="text" maxlength="50" name="title">
+                <input type="text" maxlength="50" name="title" required>
             </label>
         </div>
 
         <div>
             <label>
-                    Текст статьи:
-                    <textarea name="article_text"></textarea>
+                Текст статьи:
+                <textarea name="article_text" required></textarea>
+            </label>
+        </div>
+
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" name="is_favorite">
+                Избранная статья
+            </label>
+        </div>
+
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" name="is_public">
+                Публичная статья
             </label>
         </div>
 
@@ -31,7 +45,10 @@
             <button type="submit">Готово</button>
         </div>
     </form>
-    <div style="margin-top: 20px;">
-        <a href="/lab5/" class="lab5-btn">Меню</a>
+    
+    <br>
+
+    <div style="display: flex; justify-content: center; margin: 20px 0;">
+        <a href="/lab5/list" class="lab5-btn">Список статей</a>
     </div>
 {% endblock %}

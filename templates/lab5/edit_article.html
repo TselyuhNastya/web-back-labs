@@ -23,7 +23,21 @@
         <div>
             <label>
                 Текст статьи:
-                <textarea name="article_text">{{ article['article_text'] }}</textarea>
+                <textarea name="article_text" required>{{ article['article_text'] }}</textarea>
+            </label>
+        </div>
+
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" name="is_favorite" {% if article['is_favorite'] %}checked{% endif %}>
+                Избранная статья
+            </label>
+        </div>
+
+        <div class="checkbox-group">
+            <label>
+                <input type="checkbox" name="is_public" {% if article['is_public'] %}checked{% endif %}>
+                Публичная статья
             </label>
         </div>
 

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/profile.css')}}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <h1>Редактирование профиля</h1>
+
+    {% if errors %}
+        {% for error in errors %}
+            <div class="error">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if request.args.get('success') %}
+        <div class="success">Профиль успешно обновлен!</div>
+    {% endif %}
+    
+    <form method="post" class="profile-form">
+        <div class="form-group">
+            <label>
+                Логин:
+                <input type="text" value="{{ user['login'] }}" disabled>
+            </label>
+            <small>Логин нельзя изменить</small>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Реальное имя:
+                <input type="text" name="real_name" value="{{ user['real_name'] or '' }}" maxlength="100">
+            </label>
+        </div>
+
+        <h3>Смена пароля</h3>
+        
+        <div class="form-group">
+            <label>
+                Текущий пароль:
+                <input type="password" name="current_password">
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Новый пароль:
+                <input type="password" name="new_password">
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Подтверждение пароля:
+                <input type="password" name="confirm_password">
+            </label>
+        </div>
+
+        <div>
+            <button type="submit" class="lab5-change">Сохранить изменения</button>
+        </div>
+    </form>
+
+    <br>
+
+    <div style="display: flex; justify-content: center; margin: 20px 0;">
+        <a href="/lab5/" class="lab5-btn">Меню</a>
+    </div>
+{% endblock %}

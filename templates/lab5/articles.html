@@ -10,8 +10,14 @@
 
     {% if articles %}
         {% for article in articles %}
-            <div class="article-item">
+             <div class="article-item {% if article['is_favorite'] %}favorite{% endif %}">
                 <h2>{{ article['title'] }}</h2>
+                {% if article['is_favorite'] %}
+                    <div class="favorite-badge"><i>Избранная</i></div>
+                {% endif %}
+                {% if article['is_public'] %}
+                    <div class="public-badge"><i>Публичная</i></div>
+                {% endif %}
                 <blockquote>{{ article['article_text'] }}</blockquote>
                 <div class="article-actions">
                     <a href="/lab5/edit/{{ article['id'] }}" class="lab5-btn edit-btn">Редактировать</a>
@@ -28,7 +34,7 @@
     {% endif %}
 
     <br>
-    
+
     <div>
         <a href="/lab5/" class="lab5-btn">Меню</a>
     </div>

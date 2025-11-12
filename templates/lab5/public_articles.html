@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab5/articles.css')}}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <h1>Публичные статьи</h1>
+
+    {% if articles %}
+        {% for article in articles %}
+            <div class="article-item">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2 style="margin: 0;">{{ article['title'] }}</h2>
+                    <div class="article-meta">Автор: {{ article['author'] }}</div>
+                </div>
+                <blockquote>{{ article['article_text'] }}</blockquote>
+                {% if article['is_favorite'] %}
+                    <div class="favorite-badge"><i>Избранная</i></div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-articles">
+            Публичных статей пока нет.
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 20px;">
+        <a href="/lab5/" class="lab5-btn">Меню</a>
+    </div>
+{% endblock %}
