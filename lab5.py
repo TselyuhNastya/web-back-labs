@@ -105,6 +105,7 @@ def login():
         return render_template('lab5/login.html', error='Логин и/или пароль неверны')
     
     session['login'] = login
+    session['user_id'] = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
     
     db_close(conn, cur)
     
@@ -138,24 +139,25 @@ def create():
 
     conn, cur = db_connect()
 
-    #поиск пользователя
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM users WHERE login=%s;", (login, ))
-    else:
-        cur.execute("SELECT * FROM users WHERE login=?;", (login, ))
-    
-    user = cur.fetchone()
-    login_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
+    user_id = session.get('user_id')
+    if not user_id:
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT id FROM users WHERE login=%s;", (login,))
+        else:
+            cur.execute("SELECT id FROM users WHERE login=?;", (login,))
+        user = cur.fetchone()
+        user_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
+        session['user_id'] = user_id
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO articles(user_id, title, article_text, is_favorite, is_public) VALUES (%s, %s, %s, %s, %s);", 
-                   (login_id, title, article_text, is_favorite, is_public))
+                   (user_id, title, article_text, is_favorite, is_public))
     else:
         cur.execute("INSERT INTO articles(user_id, title, article_text, is_favorite, is_public) VALUES (?, ?, ?, ?, ?);", 
-                   (login_id, title, article_text, is_favorite, is_public))
+                   (user_id, title, article_text, is_favorite, is_public))
     
     db_close(conn, cur)
-    return redirect('/lab5')
+    return redirect('/lab5/list')  # 
 
 
 @lab5.route('/lab5/list')
