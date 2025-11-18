@@ -10,7 +10,7 @@
 
     {% if articles %}
         {% for article in articles %}
-             <div class="article-item {% if article['is_favorite'] %}favorite{% endif %}">
+            <div class="article-item">
                 <h2>{{ article['title'] }}</h2>
                 {% if article['is_favorite'] %}
                     <div class="favorite-badge"><i>Избранная</i></div>

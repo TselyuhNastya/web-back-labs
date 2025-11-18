@@ -8,6 +8,7 @@ from os import path
 
 lab5 = Blueprint('lab5', __name__)
 
+
 @lab5.route('/lab5/')
 def lab():
     return render_template('lab5/lab5.html', login=session.get('login'))
@@ -31,6 +32,7 @@ def db_connect():
     
     return conn, cur
 
+
 def db_close(conn, cur):
     conn.commit()
     cur.close()
@@ -46,10 +48,9 @@ def register():
     password = request.form.get('password')
     real_name = request.form.get('real_name', '')
     
-    if not (login and password):  # Исправлено условие
+    if not (login and password): 
         return render_template('lab5/register.html', error='Заполните все поля')
-    
-    #подключаемся к БД
+
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -64,9 +65,9 @@ def register():
     password_hash = generate_password_hash(password) #хеширование, чтоб не взломали
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("INSERT INTO users (login, password, real_name) VALUES (%s, %s, %s);", (login, password_hash, real_name))  # Добавлен real_name
+        cur.execute("INSERT INTO users (login, password, real_name) VALUES (%s, %s, %s);", (login, password_hash, real_name))  
     else:
-        cur.execute("INSERT INTO users (login, password, real_name) VALUES (?, ?, ?);", (login, password_hash, real_name))  # Добавлен real_name
+        cur.execute("INSERT INTO users (login, password, real_name) VALUES (?, ?, ?);", (login, password_hash, real_name))  
         
     conn.commit()
     db_close(conn, cur)
@@ -82,11 +83,12 @@ def login():
     login = request.form.get('login')
     password = request.form.get('password')
     
-    if not (login and password):  # Исправлено условие
+    if not (login and password): 
         return render_template('lab5/login.html', error='Заполните поля')
     
     conn, cur = db_connect()
 
+    #поиск пользователя в базе данных по логину
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("SELECT * FROM users WHERE login=%s;", (login,))
     else:
@@ -103,7 +105,6 @@ def login():
         return render_template('lab5/login.html', error='Логин и/или пароль неверны')
     
     session['login'] = login
-    session['user_id'] = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]  # Добавлено сохранение user_id
     
     db_close(conn, cur)
     
@@ -137,17 +138,24 @@ def create():
 
     conn, cur = db_connect()
 
-    user_id = session.get('user_id')
+    #поиск пользователя
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM users WHERE login=%s;", (login, ))
+    else:
+        cur.execute("SELECT * FROM users WHERE login=?;", (login, ))
+    
+    user = cur.fetchone()
+    login_id = user['id'] if current_app.config['DB_TYPE'] == 'postgres' else user[0]
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO articles(user_id, title, article_text, is_favorite, is_public) VALUES (%s, %s, %s, %s, %s);", 
-                   (user_id, title, article_text, is_favorite, is_public))  
+                   (login_id, title, article_text, is_favorite, is_public))
     else:
         cur.execute("INSERT INTO articles(user_id, title, article_text, is_favorite, is_public) VALUES (?, ?, ?, ?, ?);", 
-                   (user_id, title, article_text, is_favorite, is_public))
-            
+                   (login_id, title, article_text, is_favorite, is_public))
+    
     db_close(conn, cur)
-    return redirect('/lab5/list')  
+    return redirect('/lab5')
 
 
 @lab5.route('/lab5/list')
@@ -235,7 +243,7 @@ def profile():
         if not current_password:
             errors.append('Введите текущий пароль для смены пароля')
         elif not check_password_hash(user['password'], current_password):
-            errors.append('Текущий пароль неверен')
+            errors.append('Текущий пароль не верен')
         elif new_password != confirm_password:
             errors.append('Новый пароль и подтверждение не совпадают')
     
