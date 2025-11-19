@@ -62,7 +62,7 @@ def register():
         db_close(conn, cur)
         return render_template('lab5/register.html', error='Такой пользователь уже существует')
 
-    password_hash = generate_password_hash(password) #хеширование, чтоб не взломали
+    password_hash = generate_password_hash(password)
 
     if current_app.config['DB_TYPE'] == 'postgres':
         cur.execute("INSERT INTO users (login, password, real_name) VALUES (%s, %s, %s);", (login, password_hash, real_name))  
