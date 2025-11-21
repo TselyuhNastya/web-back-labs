@@ -79,3 +79,15 @@ h1 {
     font-size: 1.2em;
     font-weight: 600;
 }
+
+.office-number {
+    font-weight: 700;
+    color: #000000;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.office-status {
+    color: #666;
+    font-style: italic;
+}

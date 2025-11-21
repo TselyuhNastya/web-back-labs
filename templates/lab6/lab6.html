@@ -36,8 +36,10 @@ function getOfficeList() {
             
             li.innerHTML = `
                 <div class="office-info">
-                    Кабинет ${office.number}: ${office.tenant || 'Свободен'} - ${office.price} руб./мес.
+                    <div class="office-number">Кабинет №${office.number} - ${office.price} руб./мес.</div>
+                    <div class="office-status">${office.tenant ? 'Арендован: ' + office.tenant : 'Свободен'}</div>
                 </div>
+                <div class="office-actions"></div>
             `;
 
             const actionsDiv = document.createElement('div');
@@ -46,7 +48,7 @@ function getOfficeList() {
             if (!office.tenant) {
                 const bookingButton = document.createElement('button');
                 bookingButton.innerText = 'Зарезервировать';
-                bookingButton.className = 'btn-booking'; // Добавляем класс
+                bookingButton.className = 'btn-booking'; 
                 bookingButton.onclick = function() { booking(office.number); };
                 actionsDiv.appendChild(bookingButton);
             } else {
@@ -54,7 +56,7 @@ function getOfficeList() {
                 if (office.tenant) {
                     const cancelButton = document.createElement('button');
                     cancelButton.innerText = 'Освободить';
-                    cancelButton.className = 'btn-cancellation'; // Добавляем класс
+                    cancelButton.className = 'btn-cancellation'; 
                     cancelButton.onclick = function() { cancellation(office.number); };
                     actionsDiv.appendChild(cancelButton);
                     totalCost += office.price;
@@ -69,7 +71,7 @@ function getOfficeList() {
         if (totalCost > 0) {
             totalElement.innerHTML = `<strong>Общая стоимость аренды: ${totalCost} руб./мес.</strong>`;
         } else {
-            totalElement.innerHTML = '';
+            totalElement.innerHTML = '<div class="no-bookings">У вас пока нет бронирований!</div>';
         }
 
     });
@@ -159,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 {% endblock %}
 
 {% block main %}
-    <h1>Список кабинетов</h1>
+    <h1>Сервис аренды офисов</h1>
     <ul id="office-list"></ul>
     <div id="total-cost"></div>
 {% endblock %}
