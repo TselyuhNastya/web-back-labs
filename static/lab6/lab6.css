@@ -1,0 +1,81 @@
+h1 {
+    color: #000000;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 300;
+    font-style: italic;
+}
+
+#office-list {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#office-list li {
+    background: #fff;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.office-info {
+    font-size: 16px;
+    color: #000000;
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Стили для кнопок */
+.office-actions {
+    margin-left: 15px;
+}
+
+#office-list button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 140px;
+}
+.btn-booking {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-booking:hover {
+    background-color: #219a52;
+}
+
+.btn-cancellation {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-cancellation:hover {
+    background-color: #c0392b;
+}
+
+#total-cost {
+    background: #a87d5c;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    margin: 30px auto;
+}
+
+#total-cost strong {
+    font-size: 1.2em;
+    font-weight: 600;
+}
