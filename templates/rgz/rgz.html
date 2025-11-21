@@ -155,12 +155,6 @@ function loginPharmacist() {
     });
 }
 
-function showPharmacistPanel() {
-    document.getElementById('pharmacist-login').style.display = 'none';
-    document.getElementById('pharmacist-panel').style.display = 'block';
-    searchMedicines();
-}
-
 function addMedicine() {
     const name = document.getElementById('new-name').value;
     const genericName = document.getElementById('new-generic-name').value;
