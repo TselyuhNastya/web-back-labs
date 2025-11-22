@@ -175,6 +175,20 @@ function addMedicine() {
         return;
     }
     
+    // Валидация цены на клиенте
+    const priceValue = parseFloat(price);
+    if (priceValue <= 0) {
+        showMessage('Цена должна быть положительным числом', 'error');
+        return;
+    }
+    
+    // Валидация количества на клиенте
+    const quantityValue = parseInt(quantity);
+    if (quantityValue < 0) {
+        showMessage('Количество не может быть отрицательным', 'error');
+        return;
+    }
+    
     const json = {
         'jsonrpc': '2.0',
         'method': 'add_medicine',
@@ -182,8 +196,8 @@ function addMedicine() {
             'name': name,
             'generic_name': genericName,
             'prescription': prescription,
-            'price': parseFloat(price),
-            'quantity': parseInt(quantity)
+            'price': priceValue,
+            'quantity': quantityValue
         },
         'id': Math.round(Math.random() * 1000)
     };
@@ -271,23 +285,47 @@ function openEditModal(medicineId) {
     document.getElementById('edit-price').value = medicineData.price;
     document.getElementById('edit-quantity').value = medicineData.quantity;
     
+    // Скрываем предыдущую ошибку
+    document.getElementById('edit-error').style.display = 'none';
+    
     document.getElementById('edit-modal').style.display = 'block';
 }
 
 function closeEditModal() {
     document.getElementById('edit-modal').style.display = 'none';
+    // Скрываем ошибку при закрытии модального окна
+    document.getElementById('edit-error').style.display = 'none';
 }
 
 function saveMedicine() {
-    const id = parseInt(document.getElementById('edit-id').value);
+    const id = document.getElementById('edit-id').value;
     const name = document.getElementById('edit-name').value;
     const genericName = document.getElementById('edit-generic-name').value;
+    const price = document.getElementById('edit-price').value;
+    const quantity = document.getElementById('edit-quantity').value;
     const prescription = document.getElementById('edit-prescription').checked;
-    const price = parseFloat(document.getElementById('edit-price').value);
-    const quantity = parseInt(document.getElementById('edit-quantity').value);
     
-    if (!name || !genericName || isNaN(price) || isNaN(quantity)) {
-        showMessage('Заполните все поля корректно', 'error');
+    const errorElement = document.getElementById('edit-error');
+    
+    // Скрываем предыдущую ошибку
+    errorElement.style.display = 'none';
+    errorElement.textContent = '';
+    
+    // Проверка на клиенте
+    if (!name || !genericName || !price || !quantity) {
+        showEditError('Заполните все обязательные поля');
+        return;
+    }
+    
+    const priceValue = parseFloat(price);
+    if (priceValue <= 0) {
+        showEditError('Цена должна быть положительным числом');
+        return;
+    }
+    
+    const quantityValue = parseInt(quantity);
+    if (quantityValue < 0) {
+        showEditError('Количество не может быть отрицательным');
         return;
     }
     
@@ -295,12 +333,12 @@ function saveMedicine() {
         'jsonrpc': '2.0',
         'method': 'edit_medicine',
         'params': {
-            'id': id,
+            'id': parseInt(id),
             'name': name,
             'generic_name': genericName,
             'prescription': prescription,
-            'price': price,
-            'quantity': quantity
+            'price': priceValue,
+            'quantity': quantityValue
         },
         'id': Math.round(Math.random() * 1000)
     };
@@ -313,7 +351,7 @@ function saveMedicine() {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            showMessage('Ошибка: ' + data.error.message, 'error');
+            showEditError('Ошибка: ' + data.error.message);
         } else {
             closeEditModal();
             searchMedicines();
@@ -321,27 +359,29 @@ function saveMedicine() {
         }
     })
     .catch(error => {
-        console.error('Edit medicine error:', error);
-        showMessage('Ошибка соединения', 'error');
+        showEditError('Ошибка соединения: ' + error.message);
     });
 }
 
+function showEditError(message) {
+    const errorElement = document.getElementById('edit-error');
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+}
+
 function showMessage(message, type) {
-    const messageDiv = document.getElementById('message');
-    messageDiv.textContent = message;
-    messageDiv.className = `message ${type}`;
-    messageDiv.style.display = 'block';
+    const messageElement = document.getElementById('message');
+    messageElement.textContent = message;
+    messageElement.className = `message ${type}`;
+    messageElement.style.display = 'block';
     
     setTimeout(() => {
-        messageDiv.style.display = 'none';
+        messageElement.style.display = 'none';
     }, 5000);
 }
 
 // Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', function() {
-    {% if session.get('pharmacist_logged_in') %}
-    showPharmacistPanel();
-    {% endif %}
     searchMedicines();
     
     // Закрытие модального окна
@@ -358,6 +398,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('max-price').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') applySearch();
+    });
+    
+    // Валидация ввода цены в реальном времени
+    document.getElementById('new-price').addEventListener('input', function(e) {
+        const value = parseFloat(e.target.value);
+        if (value <= 0 && e.target.value !== '') {
+            e.target.setCustomValidity('Цена должна быть положительным числом');
+        } else {
+            e.target.setCustomValidity('');
+        }
+    });
+    
+    document.getElementById('edit-price').addEventListener('input', function(e) {
+        const value = parseFloat(e.target.value);
+        if (value <= 0 && e.target.value !== '') {
+            e.target.setCustomValidity('Цена должна быть положительным числом');
+        } else {
+            e.target.setCustomValidity('');
+        }
     });
 });
 </script>
@@ -418,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <br>
                 <div class="form-row">
-                    <input type="number" id="new-price" placeholder="Цена*" step="0.01" min="0" required>
+                    <input type="number" id="new-price" placeholder="Цена*" step="0.01" min="0.01" required>
                     <input type="number" id="new-quantity" placeholder="Количество*" min="0" required>
                 </div>
             </form>
@@ -444,6 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- Модальное окно редактирования -->
     <div id="edit-modal" class="modal">
+    <div id="edit-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
             <h2>Редактировать лекарство</h2>
@@ -452,9 +512,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="form-group">
                     <input type="text" id="edit-name" placeholder="Торговое название" required>
                     <input type="text" id="edit-generic-name" placeholder="Непатентованное название" required>
-                    <input type="number" id="edit-price" placeholder="Цена" step="0.01" min="0" required>
+                    <input type="number" id="edit-price" placeholder="Цена" step="0.01" min="0.01" required>
                     <input type="number" id="edit-quantity" placeholder="Количество" min="0" required>
                     <label class="checkbox-label"><input type="checkbox" id="edit-prescription">Рецептурный препарат</label>
+                    <div id="edit-error" class="error-message" style="display: none;"></div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-cancel" onclick="closeEditModal()">Отмена</button>

@@ -14,7 +14,7 @@ from rgz import rgz
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'секретно-секретный секрет')
-app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'sqlite')
+app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
 app.register_blueprint(lab1)
 app.register_blueprint(lab2)
@@ -145,7 +145,7 @@ def index():
                 <li><a href="/lab3">Третья лабораторная работа</a></li>
                 <li><a href="/lab4">Четвертая лабораторная работа</a></li>
                 <li><a href="/lab5">Пятая лабораторная работа</a></li>
-                <li><a href="/lab6/">Шестая лабораторная</a></li>
+                <li><a href="/lab6/">Шестая лабораторная работа</a></li>
                 <li><a href="/rgz/">Расчётно-графическая работа</a></li>
             </ul>
         </nav>
