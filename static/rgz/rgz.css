@@ -95,11 +95,12 @@
 .btn-reset { background: #f44336; color: white; }
 .btn-login { background: #2196F3; color: white; }
 .btn-add { background: #2196F3; color: white; }
-.btn-edit { background:  #4CAF50; color: rgb(255, 255, 255); }
+.btn-edit { background:  #4CAF50; color: white; }
 .btn-delete { background: #f44336; color: white; }
 .btn-prev, .btn-next { background: #607D8B; color: white; }
 .btn-save { background: #4CAF50; color: white; }
 .btn-cancel { background: #9E9E9E; color: white; }
+.btn-show-all { background: #2196F3; color: white; }
 .btn-logout { 
     background: #f44336; 
     color: white; 
@@ -249,7 +250,7 @@
 
 .form-row input {
     flex: 1;
-    min-width: 200px;
+    min-width: 310px;
 }
 
 .modal {

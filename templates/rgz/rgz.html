@@ -126,6 +126,14 @@ function resetSearch() {
     searchMedicines();
 }
 
+function showAllMedicines() {
+    currentSearchTerm = '';
+    currentMaxPrice = '';
+    currentPrescriptionOnly = false;
+    currentPage = 1;
+    searchMedicines();
+}
+
 // Функции фармацевта
 function loginPharmacist() {
     const username = document.getElementById('pharmacist-username').value;
@@ -384,6 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <br>
                 <button class="btn btn-search" onclick="applySearch()">Найти</button>
                 <button class="btn btn-reset" onclick="resetSearch()">Сбросить</button>
+                <button class="btn btn-show-all" onclick="showAllMedicines()">Показать все лекарства</button>
             </div>
         </div>
     </div>

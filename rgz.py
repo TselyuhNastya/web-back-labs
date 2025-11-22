@@ -161,11 +161,12 @@ def check_pharmacist_auth(username, password):
     if not pharmacist:
         return False
     
-    # Для PostgreSQL используем ключ, для SQLite - индекс
+    # Исправление для SQLite - правильное получение пароля
     if current_app.config['DB_TYPE'] == 'postgres':
         db_password = pharmacist['password']
     else:
-        db_password = pharmacist[2]  # password находится в третьем столбце (id, username, password)
+        # Для SQLite используем доступ по имени столбца через row_factory
+        db_password = pharmacist['password']
     
     # Простая проверка пароля (без хеширования)
     if db_password != password:
@@ -224,8 +225,91 @@ def delete_medicine_from_db(medicine_id):
     
     db_close(conn, cur)
 
+def init_db():
+    """Инициализация базы данных - создание таблиц если их нет"""
+    conn, cur = db_connect()
+    
+    if current_app.config['DB_TYPE'] == 'postgres':
+        # Создание таблицы medicines для PostgreSQL
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS medicines (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                generic_name VARCHAR(100),
+                prescription BOOLEAN DEFAULT FALSE,
+                price DECIMAL(10,2),
+                quantity INTEGER DEFAULT 0
+            )
+        """)
+        
+        # Создание таблицы pharmacists для PostgreSQL
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS pharmacists (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(50) UNIQUE NOT NULL,
+                password VARCHAR(100) NOT NULL
+            )
+        """)
+        
+        # Добавляем тестового пользователя если его нет
+        cur.execute("SELECT COUNT(*) FROM pharmacists WHERE username = 'admin'")
+        if cur.fetchone()['count'] == 0:
+            cur.execute("INSERT INTO pharmacists (username, password) VALUES ('admin', 'admin')")
+        
+        # Добавляем тестовые лекарства если их нет
+        cur.execute("SELECT COUNT(*) FROM medicines")
+        if cur.fetchone()['count'] == 0:
+            cur.execute("""
+                INSERT INTO medicines (name, generic_name, prescription, price, quantity) 
+                VALUES 
+                ('Парацетамол', 'Acetaminophen', FALSE, 150.50, 100),
+                ('Амоксициллин', 'Amoxicillin', TRUE, 450.00, 50),
+                ('Ибупрофен', 'Ibuprofen', FALSE, 200.00, 75)
+            """)
+    else:
+        # Создание таблицы medicines для SQLite
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS medicines (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                generic_name TEXT,
+                prescription BOOLEAN DEFAULT FALSE,
+                price REAL,
+                quantity INTEGER DEFAULT 0
+            )
+        """)
+        
+        # Создание таблицы pharmacists для SQLite
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS pharmacists (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL
+            )
+        """)
+        
+        # Добавляем тестового пользователя если его нет
+        cur.execute("SELECT COUNT(*) FROM pharmacists WHERE username = 'admin'")
+        if cur.fetchone()[0] == 0:
+            cur.execute("INSERT INTO pharmacists (username, password) VALUES ('admin', 'admin')")
+        
+        # Добавляем тестовые лекарства если их нет
+        cur.execute("SELECT COUNT(*) FROM medicines")
+        if cur.fetchone()[0] == 0:
+            cur.execute("""
+                INSERT INTO medicines (name, generic_name, prescription, price, quantity) 
+                VALUES 
+                ('Парацетамол', 'Acetaminophen', 0, 150.50, 100),
+                ('Амоксициллин', 'Amoxicillin', 1, 450.00, 50),
+                ('Ибупрофен', 'Ibuprofen', 0, 200.00, 75)
+            """)
+    
+    db_close(conn, cur)
+
 @rgz.route('/rgz/')
 def main():
+    # Инициализируем БД при первом обращении
+    init_db()
     return render_template('rgz/rgz.html')
 
 @rgz.route('/rgz/login', methods=['POST'])
@@ -357,3 +441,4 @@ def api():
         },
         'id': id
     }
+    
