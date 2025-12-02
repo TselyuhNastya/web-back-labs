@@ -32,28 +32,21 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
+#Ищем лекарства в базе с фильтрами и пагинацией
 def get_medicines_from_db(search_term='', max_price=None, prescription_only=False, page=1):
-    """Получаем лекарства из БД с фильтрацией и пагинацией"""
     conn, cur = db_connect()
     
-    # Базовый запрос
-    if current_app.config['DB_TYPE'] == 'postgres':
-        query = "SELECT * FROM medicines WHERE 1=1"
-        params = []
-    else:
-        query = "SELECT * FROM medicines WHERE 1=1"
-        params = []
-    
-    # Фильтрация по поисковому запросу
+    query = "SELECT * FROM medicines WHERE 1=1"
+    params = []
+
     if search_term:
         if current_app.config['DB_TYPE'] == 'postgres':
             query += " AND (name ILIKE %s OR generic_name ILIKE %s)"
-            params.extend([f'%{search_term}%', f'%{search_term}%'])
+            params.extend([search_term, search_term])  
         else:
             query += " AND (name LIKE ? OR generic_name LIKE ?)"
-            params.extend([f'%{search_term}%', f'%{search_term}%'])
-    
-    # Фильтрация по цене
+            params.extend([search_term, search_term])  
+
     if max_price:
         if current_app.config['DB_TYPE'] == 'postgres':
             query += " AND price <= %s"
@@ -62,7 +55,6 @@ def get_medicines_from_db(search_term='', max_price=None, prescription_only=Fals
             query += " AND price <= ?"
             params.append(float(max_price))
     
-    # Фильтрация по рецептурности
     if prescription_only:
         if current_app.config['DB_TYPE'] == 'postgres':
             query += " AND prescription = %s"
@@ -71,15 +63,14 @@ def get_medicines_from_db(search_term='', max_price=None, prescription_only=Fals
             query += " AND prescription = ?"
             params.append(True)
     
-    # Пагинация
-    medicines_per_page = 10
-    offset = (page - 1) * medicines_per_page
+    medicines_per_page = 10 
+    offset = (page - 1) * medicines_per_page #Считает, сколько записей пропустить, чтобы показать нужную страницу
     
     if current_app.config['DB_TYPE'] == 'postgres':
-        query += " ORDER BY id LIMIT %s OFFSET %s"
+        query += " ORDER BY name LIMIT %s OFFSET %s"
         params.extend([medicines_per_page, offset])
     else:
-        query += " ORDER BY id LIMIT ? OFFSET ?"
+        query += " ORDER BY name LIMIT ? OFFSET ?"
         params.extend([medicines_per_page, offset])
     
     cur.execute(query, params)
@@ -99,8 +90,8 @@ def get_medicines_from_db(search_term='', max_price=None, prescription_only=Fals
     db_close(conn, cur)
     return medicines
 
+#Получаем общее количество лекарств для пагинации
 def get_medicines_count(search_term='', max_price=None, prescription_only=False):
-    """Получаем общее количество лекарств для пагинации"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -113,10 +104,10 @@ def get_medicines_count(search_term='', max_price=None, prescription_only=False)
     if search_term:
         if current_app.config['DB_TYPE'] == 'postgres':
             query += " AND (name ILIKE %s OR generic_name ILIKE %s)"
-            params.extend([f'%{search_term}%', f'%{search_term}%'])
+            params.extend([search_term, search_term])  
         else:
             query += " AND (name LIKE ? OR generic_name LIKE ?)"
-            params.extend([f'%{search_term}%', f'%{search_term}%'])
+            params.extend([search_term, search_term])  
     
     if max_price:
         if current_app.config['DB_TYPE'] == 'postgres':
@@ -146,8 +137,8 @@ def get_medicines_count(search_term='', max_price=None, prescription_only=False)
     db_close(conn, cur)
     return count
 
+#Проверяем авторизацию формацевта
 def check_pharmacist_auth(username, password):
-    """Проверяем авторизацию фармацевта"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -161,20 +152,19 @@ def check_pharmacist_auth(username, password):
     if not pharmacist:
         return False
     
-    # Для PostgreSQL используем ключ, для SQLite - индекс
+    #Для PostgreSQL используем ключ, для SQLite - индекс
     if current_app.config['DB_TYPE'] == 'postgres':
         db_password = pharmacist['password']
     else:
-        db_password = pharmacist[2]  # password находится в третьем столбце (id, username, password)
+        db_password = pharmacist[2]  #password находится в третьем столбце (id, username, password)
     
-    # Простая проверка пароля (без хеширования)
     if db_password != password:
         return False
     
     return True
 
+#Добавляем новые лекарства в БД
 def add_medicine_to_db(name, generic_name, prescription, price, quantity):
-    """Добавляем новое лекарство в БД"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -189,13 +179,13 @@ def add_medicine_to_db(name, generic_name, prescription, price, quantity):
             INSERT INTO medicines (name, generic_name, prescription, price, quantity) 
             VALUES (?, ?, ?, ?, ?)
         """, (name, generic_name, prescription, float(price), int(quantity)))
-        medicine_id = cur.lastrowid
+        medicine_id = cur.lastrowid #Берем id последней вставленной книги
     
     db_close(conn, cur)
     return medicine_id
 
+#Обновляем результаты в БД
 def update_medicine_in_db(medicine_id, name, generic_name, prescription, price, quantity):
-    """Обновляем лекарство в БД"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -213,8 +203,8 @@ def update_medicine_in_db(medicine_id, name, generic_name, prescription, price, 
     
     db_close(conn, cur)
 
+#Удаляем лекарства из БД
 def delete_medicine_from_db(medicine_id):
-    """Удаляем лекарство из БД"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -228,6 +218,7 @@ def delete_medicine_from_db(medicine_id):
 def main():
     return render_template('rgz/rgz.html')
 
+#Вход формацевта
 @rgz.route('/rgz/login', methods=['POST'])
 def login():
     username = request.json.get('username')
@@ -251,6 +242,7 @@ def login():
             'message': 'Неверные учетные данные'
         }
 
+#Выход формацевта
 @rgz.route('/rgz/logout')
 def logout():
     session.pop('pharmacist_logged_in', None)
@@ -259,7 +251,7 @@ def logout():
 
 @rgz.route('/rgz/json-rpc-api/', methods=['POST'])
 def api():
-    data = request.json
+    data = request.json #Берём JSON из тела HTTP-запроса и превращаем в Python-словарь
     id = data['id']
     
     if data['method'] == 'search_medicines':
@@ -284,7 +276,7 @@ def api():
             'id': id
         }
     
-    # Проверяем авторизацию фармацевта для следующих методов
+    #Проверяем авторизацию фармацевта для следующих методов
     if not session.get('pharmacist_logged_in'):
         return {
             'jsonrpc': '2.0',
@@ -298,7 +290,7 @@ def api():
     if data['method'] == 'add_medicine':
         params = data.get('params', {})
         
-        # Валидация цены - не может быть отрицательной или равной нулю
+        #Валидация цены
         price = params.get('price')
         if price is not None:
             try:
@@ -343,7 +335,7 @@ def api():
         params = data.get('params', {})
         medicine_id = params['id']
         
-        # Валидация цены - не может быть отрицательной или равной нулю
+        #Валидация цены 
         price = params.get('price')
         if price is not None:
             try:

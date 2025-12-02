@@ -7,6 +7,9 @@
 
 {% block script %}
 <script>
+   
+const currentUserLogin = '{{ session.get("login", "") }}';
+
 function getOfficeList() {
     const url = '/lab6/json-rpc-api/';
     const json = {
@@ -14,7 +17,7 @@ function getOfficeList() {
         'method': 'info',
         'id': Math.round(Math.random() * 1000)
     };
-    fetch(url, {
+    fetch(url, { //отправляем запрос на сервер
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(json)
@@ -42,29 +45,30 @@ function getOfficeList() {
                 <div class="office-actions"></div>
             `;
 
-            const actionsDiv = document.createElement('div');
+            const actionsDiv = document.createElement('div'); //создаем контейнер для кнопок
             actionsDiv.className = 'office-actions';
 
             if (!office.tenant) {
-                const bookingButton = document.createElement('button');
-                bookingButton.innerText = 'Зарезервировать';
-                bookingButton.className = 'btn-booking'; 
-                bookingButton.onclick = function() { booking(office.number); };
-                actionsDiv.appendChild(bookingButton);
+            const bookingButton = document.createElement('button');
+            bookingButton.innerText = 'Зарезервировать';
+            bookingButton.className = 'btn-booking'; 
+            bookingButton.onclick = function() { booking(office.number); };
+            actionsDiv.appendChild(bookingButton);
+        } else {
+            if (office.tenant === currentUserLogin) {
+                const cancelButton = document.createElement('button');
+                cancelButton.innerText = 'Освободить';
+                cancelButton.className = 'btn-cancellation'; 
+                cancelButton.onclick = function() { cancellation(office.number); };
+                actionsDiv.appendChild(cancelButton);
+                totalCost += office.price;
             } else {
-                const login = '{{ session.get("login", "") }}';
-                if (office.tenant) {
-                    const cancelButton = document.createElement('button');
-                    cancelButton.innerText = 'Освободить';
-                    cancelButton.className = 'btn-cancellation'; 
-                    cancelButton.onclick = function() { cancellation(office.number); };
-                    actionsDiv.appendChild(cancelButton);
-                    totalCost += office.price;
-                }
+                actionsDiv.innerHTML = '<span class="occupied">Офис занят другим арендателем</span>';
             }
+        }
 
-            li.appendChild(actionsDiv);
-            ul.appendChild(li);
+            li.appendChild(actionsDiv); //добавляем кнопку в карточку офиса
+            ul.appendChild(li); //вешаем готовую карточку на страницу
         }
 
         const totalElement = document.getElementById('total-cost');

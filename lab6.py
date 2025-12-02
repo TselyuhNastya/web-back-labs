@@ -32,8 +32,8 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
+#Получаем список всех офисов из бд
 def get_offices_from_db():
-    """Получаем офисы из БД"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -52,8 +52,8 @@ def get_offices_from_db():
     db_close(conn, cur)
     return offices
 
+#Обновление арендатора
 def update_office_in_db(office_number, tenant):
-    """Обновляем арендатора офиса в БД"""
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -72,7 +72,7 @@ def api():
     data = request.json
     id = data['id']
     
-    if data['method'] == 'info':
+    if data['method'] == 'info': #Получение информации о всех кабинетах 
         offices = get_offices_from_db()  
         return {
             'jsonrpc': '2.0',
@@ -91,7 +91,7 @@ def api():
             'id': id
         }
     
-    if data['method'] == 'booking':
+    if data['method'] == 'booking': #Бронирование кабинета
         office_number = data['params']
         offices = get_offices_from_db() 
         
@@ -123,7 +123,7 @@ def api():
             'id': id
         }
     
-    if data['method'] == 'cancellation':
+    if data['method'] == 'cancellation': #Снятие брони кабинета
         office_number = data['params']
         offices = get_offices_from_db() 
         
