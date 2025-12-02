@@ -156,9 +156,9 @@ def check_pharmacist_auth(username, password):
     if current_app.config['DB_TYPE'] == 'postgres':
         db_password = pharmacist['password']
     else:
-        db_password = pharmacist[2]  #password находится в третьем столбце (id, username, password)
+        db_password = pharmacist[2]
     
-    if db_password != password:
+    if not check_password_hash(db_password, password):
         return False
     
     return True
