@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, abort, request, render_template, make_response, redirect, session, current_app
+from flask import Blueprint, jsonify, abort, request, render_template, make_response, redirect, session, current_app
 from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
 import psycopg2
@@ -48,7 +48,8 @@ films = [
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
 def get_films():
     return films
-
+    return jsonify(films)
+    
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
     if id < 0 or id >= len(films):
@@ -73,7 +74,7 @@ def put_film(id):
 
     if film['description'] == "":
         return {'description': 'Заполните описание'}, 400
-        
+
     films[id] = film
     return films[id]
 
