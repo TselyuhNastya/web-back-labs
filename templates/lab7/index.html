@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{# номер лабораторной работы: #}
 {% block lab %}Лабораторная работа 7{% endblock %}
 
 {% block script %}
@@ -31,29 +30,27 @@
 </div>
 
 <div id="film-modal" class="modal">
-    <div> <!-- Добавьте этот внутренний div -->
-        <input type="hidden" id="id">
-        <label>
-            Название фильма на русском:
-            <input type="text" id="title.ru">
-        </label><br>
+    <div class="modal-content">
+        <input type="hidden" id="film-id">
+        
+        <label for="title_ru">Название фильма на русском: *</label>
+        <input type="text" id="title_ru" required>
+        <div id="title_ru_error" class="error-message"></div>
 
-        <label>
+        <label for="title">
             Название фильма на оригинальном языке
             <i>(если фильм русский, то оставьте пустым):</i>
-            <input type="text" id="title">
-        </label><br>
+        </label>
+        <input type="text" id="title">
+        <div id="title_error" class="error-message"></div>
 
-        <label>
-            Год выпуска:
-            <input type="number" id="year">
-        </label><br>
+        <label for="year">Год выпуска: *</label>
+        <input type="number" id="year" required>
+        <div id="year_error" class="error-message"></div>
 
-        <label>
-            Описание:
-            <textarea id="description"></textarea>
-            <div id="description_error" class="error-message"></div>
-        </label><br>
+        <label for="description">Описание: *</label>
+        <textarea id="description" required></textarea>
+        <div id="description_error" class="error-message"></div>
 
         <button onclick="sendFilm()">ОК</button>
         <button onclick="cancel()">Отмена</button>

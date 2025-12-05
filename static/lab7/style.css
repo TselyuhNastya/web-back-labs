@@ -75,6 +75,7 @@ button:nth-child(1) {
     background-color: #3498db;
     color: white;
     border: 1px solid #2980b9;
+    margin-bottom: 5px;
 }
 
 button:nth-child(2) {
@@ -112,6 +113,23 @@ div > button {
     to { opacity: 1; }
 }
 
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    
+    /* Центрирование */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 /* Контейнер модального окна */
 .modal > div {
     background-color: white;
@@ -122,13 +140,11 @@ div > button {
     max-height: 80vh; /* Ограничение высоты */
     overflow-y: auto; /* Прокрутка при необходимости */
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease;
-    margin: 0; /* Убираем старый margin: auto */
 }
 
 label {
     display: block;
-    margin-bottom: 15px;
+  
     font-weight: 500;
     color: #000000;
 }
@@ -138,7 +154,7 @@ input[type="number"],
 textarea {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
+    margin-bottom: 25px;
     border: 2px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
