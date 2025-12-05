@@ -50,4 +50,5 @@ function deleteFilm(id, title) {
     fetch(`/lab7/rest-api/films/${id}`, {method: 'DELETE'})
     .then(function () {
         fillFilmList();
-    });
+    })
+}
