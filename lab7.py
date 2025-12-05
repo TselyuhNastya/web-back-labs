@@ -64,7 +64,7 @@ def main():
     return render_template('lab7/index.html')
 
 @lab7.route('/lab7/rest-api/films/', methods=['GET'])
-def get_films()
+def get_films():
     conn, cur = db_connect()
     
     if current_app.config['DB_TYPE'] == 'postgres':
