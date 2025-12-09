@@ -18,24 +18,24 @@ function fillFilmList() {
                 tdTitleRus.innerText = films[i].title_ru;
                 tdYear.innerText = films[i].year;
 
-                // Отображение оригинального названия
-                if (films[i].title && films[i].title !== films[i].title_ru) {
+                //отображение оригинального названия
+                if (films[i].title !== films[i].title_ru) {
                     tdTitle.innerHTML = `<span class="original-title">${films[i].title}</span>`;
                 } else {
                     tdTitle.innerHTML = `<span class="original-title">${films[i].title_ru}</span>`;
                 }
 
-                // Кнопки действий
+                //кнопки
                 let editButton = document.createElement('button');
                 editButton.innerText = 'Редактировать';
                 editButton.onclick = function() {
-                    editFilm(films[i].id);  // Используем ID из БД
+                    editFilm(films[i].id); 
                 };
                 
                 let delButton = document.createElement('button');
                 delButton.innerText = 'Удалить';
                 delButton.onclick = function() {
-                    deleteFilm(films[i].id, films[i].title_ru);  // Используем ID из БД
+                    deleteFilm(films[i].id, films[i].title_ru); 
                 };
                 
                 tdActions.append(editButton);
@@ -67,7 +67,6 @@ function deleteFilm(id, title) {
     });
 }
 
-// Функция очистки всех сообщений об ошибках
 function clearAllErrors() {
     document.getElementById('title_ru_error').innerText = '';
     document.getElementById('title_error').innerText = '';
@@ -93,6 +92,7 @@ function cancel() {
     hideModal();
 }
 
+//готовим форму для добавления нового фильма 
 function addFilm() {
     document.getElementById('film-id').value = '';
     document.getElementById('title').value = '';
@@ -102,6 +102,7 @@ function addFilm() {
     showModal();
 }
 
+//функция отправки данных фильма на сервер (добавление или обновление)
 function sendFilm() {
     const id = document.getElementById('film-id').value;
     const film = {
@@ -131,10 +132,9 @@ function sendFilm() {
     })
     .then(function(errors) {
         if (errors && Object.keys(errors).length > 0) {
-            // Отображение ошибок для каждого поля
             for (const [field, message] of Object.entries(errors)) {
-                const errorElement = document.getElementById(`${field}_error`);
-                const inputElement = document.getElementById(field);
+                const errorElement = document.getElementById(`${field}_error`); //элемент ошибки
+                const inputElement = document.getElementById(field); //поле ввода
                 
                 if (errorElement && inputElement) {
                     errorElement.innerText = message;
@@ -148,6 +148,7 @@ function sendFilm() {
     });
 }
 
+//функция загружает данные существующего фильма для редактирования
 function editFilm(id) {
     fetch(`/lab7/rest-api/films/${id}`)
         .then(function (data) {

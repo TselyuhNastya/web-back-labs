@@ -67,10 +67,7 @@ def main():
 def get_films():
     conn, cur = db_connect()
     
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT id, title, title_ru, year, description FROM lab7_films ORDER BY id")
-    else:
-        cur.execute("SELECT id, title, title_ru, year, description FROM lab7_films ORDER BY id")
+    cur.execute("SELECT id, title, title_ru, year, description FROM lab7_films ORDER BY id")
     
     films = cur.fetchall()
     db_close(conn, cur)
@@ -128,9 +125,10 @@ def del_film(id):
     db_close(conn, cur)
     return '', 204
 
+#редактирование фильм 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def put_film(id):
-    film = request.get_json()
+    film = request.get_json() #передаем данные фильма 
     
     errors, validated_film = validate_film(film)
     if errors:
@@ -165,6 +163,7 @@ def put_film(id):
     db_close(conn, cur)
     return jsonify(validated_film)
 
+#добавление нового фильма 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
