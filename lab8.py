@@ -65,6 +65,12 @@ def login():
         return redirect('/lab8/')
     else:
         return render_template('lab8/login.html', error='Неверный логин или пароль')
+
+@lab8.route('/lab8/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/lab8/')
     
 @lab8.route('/lab8/articles/')
 @login_required
