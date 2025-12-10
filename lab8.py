@@ -155,6 +155,7 @@ def public_articles():
     public_articles_list = articles.query.filter_by(is_public=True).all()
     return render_template('lab8/public_articles.html', articles=public_articles_list)
 
+    
 @lab8.route('/lab8/articles/search', methods=['GET', 'POST'])
 def search_articles():
     if request.method == 'GET':
@@ -164,28 +165,31 @@ def search_articles():
     
     if not search_query:
         return render_template('lab8/search.html', error='Введите поисковый запрос')
-
-    from sqlalchemy import or_, func
+    
+    # Используем func.lower() для регистронезависимого поиска в SQLite
+    search_query_lower = search_query.lower()
     
     if current_user.is_authenticated:
+        # Для авторизованных: свои + публичные
         search_results = articles.query.filter(
             or_(
-                articles.login_id == current_user.id,
-                articles.is_public == True
+                articles.login_id == current_user.id,  # Свои статьи
+                articles.is_public == True              # Публичные статьи
             ),
             or_(
-                func.lower(articles.title).contains(search_query.lower()),
-                func.lower(articles.article_text).contains(search_query.lower())
+                func.lower(articles.title).contains(search_query_lower),
+                func.lower(articles.article_text).contains(search_query_lower)
             )
-        ).all()
+        ).order_by(articles.id.desc()).all()
     else:
+        # Для неавторизованных: только публичные
         search_results = articles.query.filter(
             articles.is_public == True,
             or_(
-                func.lower(articles.title).contains(search_query.lower()),
-                func.lower(articles.article_text).contains(search_query.lower())
+                func.lower(articles.title).contains(search_query_lower),
+                func.lower(articles.article_text).contains(search_query_lower)
             )
-        ).all()
+        ).order_by(articles.id.desc()).all()
     
     return render_template('lab8/search_results.html',
                          search_query=search_query,
