@@ -1,0 +1,75 @@
+.lab8-main {
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.lab8-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #3498db;
+}
+
+.lab8-header {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.lab8-nav {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.lab8-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.lab8-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.lab8-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.lab8-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.lab8-user {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e74c3c;
+    background: #f9f9f9;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 2px solid #e74c3c;
+    min-width: 120px;
+    text-align: center;
+}
