@@ -1,0 +1,146 @@
+.lab8-main {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.lab8-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #9b59b6;
+    padding-bottom: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Стили для формы */
+.lab8-form {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.lab8-form-group {
+    margin-bottom: 25px;
+}
+
+.lab8-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Стили для полей ввода */
+.lab8-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+.lab8-input:focus {
+    border-color: #9b59b6;
+    outline: none;
+    box-shadow: 0 0 5px rgba(155, 89, 182, 0.5);
+}
+
+/* Стили для кнопок */
+.lab8-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    margin-bottom: 10px;
+}
+
+.lab8-btn:hover {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.lab8-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.lab8-btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+}
+
+.lab8-btn-secondary:hover {
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+}
+
+/* Стили для сообщения об ошибке */
+.lab8-error {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 5px solid #c0392b;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Анимация */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Контейнер для кнопок */
+.lab8-buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Стили для ссылок в форме */
+.lab8-form-links {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.lab8-form-links a {
+    color: #9b59b6;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.lab8-form-links a:hover {
+    color: #8e44ad;
+    text-decoration: underline;
+}
+
