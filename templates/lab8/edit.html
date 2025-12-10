@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab8/edit.css') }}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <div class="lab8-main">
+        <div class="lab8-header">Редактировать статью</div>
+        
+        {% if error %}
+            <div class="lab8-error">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post" class="lab8-form">
+            <div class="lab8-form-group">
+                <label>Название:</label>
+                <input type="text" name="title" class="lab8-input" value="{{ article.title }}" maxlength="50" required>
+            </div>
+            
+            <div class="lab8-form-group">
+                <label>Текст статьи:</label>
+                <textarea name="article_text" class="lab8-textarea" required>{{ article.article_text }}</textarea>
+            </div>
+            
+            <div class="lab8-form-group">
+                <label class="lab8-checkbox-label">
+                    <input type="checkbox" name="is_public" {% if article.is_public %}checked{% endif %}> Публичная
+                </label>
+            </div>
+            
+            <div class="lab8-form-group">
+                <label class="lab8-checkbox-label">
+                    <input type="checkbox" name="is_favorite" {% if article.is_favorite %}checked{% endif %}> Избранная
+                </label>
+            </div>
+            
+            <div class="lab8-buttons-container">
+                <button type="submit" class="lab8-btn">Сохранить</button>
+                <a href="/lab8/articles" class="lab8-btn lab8-btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

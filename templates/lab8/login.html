@@ -10,6 +10,12 @@
     <div class="lab8-main">
         <div class="lab8-header">Вход в систему</div>
         
+        {% if registered %}
+            <div class="lab8-success">
+                Регистрация прошла успешно! Теперь войдите в систему.
+            </div>
+        {% endif %}
+        
         {% if error %}
             <div class="lab8-error">{{ error }}</div>
         {% endif %}
@@ -24,6 +30,12 @@
             <div class="lab8-form-group">
                 <label>
                     Пароль: <input type="password" name="password" class="lab8-input">
+                </label>
+            </div>
+            
+            <div class="lab8-form-group">
+                <label class="lab8-checkbox-label">
+                    <input type="checkbox" name="remember"> Запомнить меня
                 </label>
             </div>
             

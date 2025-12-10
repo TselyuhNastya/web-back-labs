@@ -1,0 +1,170 @@
+.lab8-main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.lab8-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #f39c12;
+    padding-bottom: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    position: relative;
+}
+
+.lab8-header::after {
+    content: " ✏️";
+    font-size: 0.8em;
+    position: absolute;
+    margin-left: 10px;
+}
+
+/* Стили для формы */
+.lab8-form {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.lab8-form-group {
+    margin-bottom: 25px;
+}
+
+.lab8-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+/* Стили для полей ввода */
+.lab8-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.lab8-input:focus {
+    outline: none;
+    border-color: #f39c12;
+    box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+}
+
+/* Стили для текстового поля */
+.lab8-textarea {
+    width: 100%;
+    height: 400px;
+    padding: 15px;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    line-height: 1.5;
+    background-color: white;
+}
+
+.lab8-textarea:focus {
+    outline: none;
+    border-color: #f39c12;
+    box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+}
+
+/* Подсветка для заполненных полей */
+.lab8-input:not(:placeholder-shown),
+.lab8-textarea:not(:placeholder-shown) {
+    background-color: #fffde7;
+    border-color: #f1c40f;
+}
+
+/* Стили для чекбоксов */
+.lab8-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #000000;
+    border-radius: 5px;
+}
+
+.lab8-checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #f39c12;
+}
+
+/* Контейнер для кнопок */
+.lab8-buttons-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+/* Стили для кнопок */
+.lab8-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.lab8-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.lab8-btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+}
+
+/* Стили для сообщения об ошибке */
+.lab8-error {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 5px solid #c0392b;
+    animation: fadeIn 0.3s ease;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Плейсхолдеры */
+.lab8-input::placeholder,
+.lab8-textarea::placeholder {
+    color: #95a5a6;
+    font-style: italic;
+}
+
