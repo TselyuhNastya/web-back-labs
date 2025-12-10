@@ -166,30 +166,28 @@ def search_articles():
     if not search_query:
         return render_template('lab8/search.html', error='Введите поисковый запрос')
     
-    # Используем func.lower() для регистронезависимого поиска в SQLite
+    # Преобразуем запрос в нижний регистр
     search_query_lower = search_query.lower()
     
+    # Получаем ВСЕ статьи, а затем фильтруем в Python
     if current_user.is_authenticated:
-        # Для авторизованных: свои + публичные
-        search_results = articles.query.filter(
+        all_articles = articles.query.filter(
             or_(
-                articles.login_id == current_user.id,  # Свои статьи
-                articles.is_public == True              # Публичные статьи
-            ),
-            or_(
-                func.lower(articles.title).contains(search_query_lower),
-                func.lower(articles.article_text).contains(search_query_lower)
+                articles.login_id == current_user.id,
+                articles.is_public == True
             )
         ).order_by(articles.id.desc()).all()
     else:
-        # Для неавторизованных: только публичные
-        search_results = articles.query.filter(
-            articles.is_public == True,
-            or_(
-                func.lower(articles.title).contains(search_query_lower),
-                func.lower(articles.article_text).contains(search_query_lower)
-            )
+        all_articles = articles.query.filter_by(
+            is_public=True
         ).order_by(articles.id.desc()).all()
+    
+    # Фильтруем в Python (регистронезависимо)
+    search_results = []
+    for article in all_articles:
+        if (search_query_lower in article.title.lower() or 
+            search_query_lower in article.article_text.lower()):
+            search_results.append(article)
     
     return render_template('lab8/search_results.html',
                          search_query=search_query,
