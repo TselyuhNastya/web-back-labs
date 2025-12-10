@@ -21,10 +21,15 @@
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .lab8-form-group {
     margin-bottom: 25px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .lab8-form-group label {
@@ -102,34 +107,55 @@
     font-weight: bold;
     border-left: 5px solid #c0392b;
     animation: fadeIn 0.3s ease;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* Анимация */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 /* Контейнер для кнопок */
 .lab8-buttons-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     margin-top: 20px;
+    width: 100%;
+    max-width: 250px;
 }
 
-/* Стили для ссылок в форме */
-.lab8-form-links {
+/* Стили для ссылок под формой - ВАЖНО: используется lab8-form-footer */
+.lab8-form-footer {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
+    color: #666;
+    width: 100%;
 }
 
-.lab8-form-links a {
+.lab8-form-footer a {
     color: #9b59b6;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
+    margin-left: 5px;
 }
 
-.lab8-form-links a:hover {
+.lab8-form-footer a:hover {
     color: #8e44ad;
     text-decoration: underline;
 }
+
 

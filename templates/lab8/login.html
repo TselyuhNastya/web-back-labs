@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab8/login.css') }}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <div class="lab8-main">
+        <div class="lab8-header">Вход в систему</div>
+        
+        {% if error %}
+            <div class="lab8-error">{{ error }}</div>
+        {% endif %}
+        
+        <form action="/lab8/login" method="post" class="lab8-form">
+            <div class="lab8-form-group">
+                <label>
+                    Логин: <input type="text" name="login" class="lab8-input">
+                </label>
+            </div>
+            
+            <div class="lab8-form-group">
+                <label>
+                    Пароль: <input type="password" name="password" class="lab8-input">
+                </label>
+            </div>
+            
+            <div class="lab8-buttons-container">
+                <button type="submit" class="lab8-btn">Вход</button>
+                <a href="/lab8/" class="lab8-btn lab8-btn-secondary">Назад</a>
+            </div>
+        </form>
+        
+        <div class="lab8-form-footer">
+            Нет аккаунта? <a href="/lab8/register">Зарегистрируйтесь</a>
+        </div>
+    </div>
+{% endblock %}
