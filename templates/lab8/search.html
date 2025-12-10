@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab8/search.css') }}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Поиск статей</h1>
+    
+    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+    
+    <form method="post">
+        <input type="text" name="search_query" placeholder="Что ищем?">
+        <button>Искать</button>
+    </form>
+    
+    <br>
+
+    <div class="lab8-back-container">
+        <a href="/lab8/" class="lab8-back-btn">Назад в базу знаний</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab8/search_result.css') }}">
+{% endblock %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <div class="lab8-main">
+        <h1>Найдено по запросу "<span>{{ search_query }}</span>": <span>{{ count }}</span> статей</h1>
+        
+        {% for article in results %}
+        <div class="search-article-full">
+            <h3>{{ article.title }}</h3>
+            
+            <div class="article-meta">
+                <span>Публичная: {{ 'Да' if article.is_public else 'Нет' }}</span>
+                <span>Избранная: {{ 'Да' if article.is_favorite else 'Нет' }}</span>
+                {% if article.author %}
+                <span class="article-author">Автор: {{ article.author.login }}</span>
+                {% endif %}
+                {% if article.created_at %}
+                <span class="article-date">Создано: {{ article.created_at.strftime('%d.%m.%Y') }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="article-content">
+                {{ article.article_text }}
+            </div>
+            
+            <div class="article-divider"></div>
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>Ничего не найдено. Попробуйте изменить поисковый запрос.</p>
+        </div>
+        {% endfor %}
+        
+        <div class="search-navigation">
+            <a href="/lab8/articles/search" class="lab8-btn">Новый поиск</a>
+            <a href="/lab8/" class="lab8-btn lab8-btn-secondary">Назад в базу знаний</a>
+        </div>
+    </div>
+{% endblock %}

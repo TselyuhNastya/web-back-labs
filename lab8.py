@@ -7,6 +7,7 @@ from psycopg2.extras import RealDictCursor
 from db import db
 from db.models import users, articles
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy import or_
 
 lab8 = Blueprint('lab8', __name__)  
 
@@ -148,3 +149,62 @@ def delete_article(article_id):
     
     return redirect('/lab8/articles')
 
+
+@lab8.route('/lab8/articles/public')
+def public_articles():
+    public_articles_list = articles.query.filter_by(is_public=True).all()
+    return render_template('lab8/public_articles.html', articles=public_articles_list)
+
+    
+@lab8.route('/lab8/articles/search', methods=['GET', 'POST'])
+def search_articles():
+    if request.method == 'GET':
+        return render_template('lab8/search.html')
+    
+    search_query = request.form.get('search_query', '').strip()
+    
+    if not search_query:
+        return render_template('lab8/search.html', error='Введите поисковый запрос')
+    
+    # Форматируем запрос для ilike (добавляем % в начале и конце)
+    search_pattern = f'%{search_query}%'
+    
+    if current_user.is_authenticated:
+        # Для авторизованных: свои + публичные
+        search_results = articles.query.filter(
+            or_(
+                articles.login_id == current_user.id,  # Свои статьи
+                articles.is_public == True              # Публичные статьи
+            ),
+            or_(
+                articles.title.ilike(search_pattern),
+                articles.article_text.ilike(search_pattern)
+            )
+        ).order_by(articles.id.desc()).all()
+    else:
+        # Для неавторизованных: только публичные
+        search_results = articles.query.filter(
+            articles.is_public == True,
+            or_(
+                articles.title.ilike(search_pattern),
+                articles.article_text.ilike(search_pattern)
+            )
+        ).order_by(articles.id.desc()).all()
+    
+    return render_template('lab8/search_results.html',
+                         search_query=search_query,
+                         results=search_results,
+                         count=len(search_results))
+
+@lab8.route('/lab8/article/<int:article_id>')
+def view_article(article_id):
+    article = articles.query.get(article_id)
+    
+    if not article:
+        return "Статья не найдена", 404
+    
+    # Проверяем доступ: статья должна быть либо публичной, либо своей
+    if not article.is_public and (not current_user.is_authenticated or article.login_id != current_user.id):
+        return "Доступ запрещен", 403
+    
+    return render_template('lab8/view_article.html', article=article)

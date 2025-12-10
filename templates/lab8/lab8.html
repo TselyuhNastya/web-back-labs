@@ -13,7 +13,9 @@
         <div class="lab8-nav">
             <div class="lab8-buttons">
                 <a href="/lab8/articles" class="lab8-btn">Мои статьи</a>
-                <a href="/lab8/create" class="lab8-btn">Создать статью</a>
+                <a href="/lab8/articles/public" class="lab8-btn">Публичные статьи</a>
+                <a href="/lab8/articles/search" class="lab8-btn">Поиск</a>
+                <a href="/lab8/create" class="lab8-btn">Создать cтатью</a>
                 {% if current_user.is_authenticated %}
                     <a href="/lab8/logout" class="lab8-btn">Выйти</a>
                 {% else %}

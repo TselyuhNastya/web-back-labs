@@ -1,0 +1,153 @@
+.lab8-main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #f39c12;
+    padding-bottom: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+h1 span {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+/* Полная статья в результатах поиска */
+.search-article-full {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-left: 5px solid #f39c12;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-article-full h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #f39c12;
+    padding-bottom: 15px;
+}
+
+/* Мета-информация */
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.article-meta span {
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.article-author {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.article-date {
+    color: #27ae60;
+}
+
+/* Полный текст статьи */
+.article-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #000000;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Действия с статьей */
+.article-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Разделитель между статьями */
+.article-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #f39c12, transparent);
+    margin: 30px 0;
+}
+
+/* Кнопки */
+.lab8-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: center;
+    min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Навигация */
+.search-navigation {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.lab8-btn-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+}
+
+/* Нет результатов */
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f8f9fa;
+    border: 2px dashed #bdc3c7;
+    border-radius: 10px;
+    color: #7f8c8d;
+    font-size: 1.2em;
+    margin: 30px 0;
+}
