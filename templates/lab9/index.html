@@ -7,108 +7,77 @@
 {% endblock %}
 
 {% block main %}
-<h1>Новогодние поздравления</h1>
+<h1>🎁Новогодние поздравления🎁</h1>
 
-<div class="new-year-theme">
-    <div class="info">
-        <p>Открыто: <span id="opened-count">0</span>/3</p>
-        <p>Осталось: <span id="remaining-boxes">10</span></p>
-        <button id="reset-button">Заново</button>
-    </div>
+{% if auth %}
+<div class="user-info">
+    Вы вошли как: {{ login }} | <a href="/lab9/logout">Выйти</a>
+    <form action="/lab9/santa" method="post" class="santa-form">
+        <button type="submit" class="santa-btn">🎅 Дед Мороз</button>
+    </form>
+</div>
+{% endif %}
 
-    <div class="boxes" id="boxes-container"></div>
+{% if request.args.get('error') %}
+<div class="error">{{ request.args.get('error') }}</div>
+{% endif %}
 
-    <div class="message" id="message-area">
-        Нажмите на коробку, чтобы открыть подарок
-    </div>
+{% if request.args.get('message') %}
+<div class="success">{{ request.args.get('message') }}</div>
+{% endif %}
+
+<div class="stats">
+    <p>Открыто: {{ opened_count }}/3 | Осталось: {{ remaining }}</p>
+    {% if not auth %}
+    <p><a href="/lab9/login"><i>Войти</i></a> | <a href="/lab9/register"><i>Зарегистрироваться</i></a></p>
+    {% endif %}
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const boxesContainer = document.getElementById('boxes-container');
-    const messageArea = document.getElementById('message-area');
-    const openedCountSpan = document.getElementById('opened-count');
-    const remainingBoxesSpan = document.getElementById('remaining-boxes');
-    const resetButton = document.getElementById('reset-button');
-
-    function loadBoxes() {
-        fetch('/lab9/api/get_boxes')
-            .then(r => r.json())
-            .then(data => {
-                boxesContainer.innerHTML = '';
-                data.boxes.forEach(box => {
-                    const div = document.createElement('div');
-                    div.className = box.opened ? 'box opened' : 'box';
-                    div.dataset.id = box.id;
-                    div.style.top = box.top + '%';
-                    div.style.left = box.left + '%';
-                    
-                    const img = document.createElement('img');
-                    img.src = box.gift_image;
-                    img.alt = 'Коробка';
-                    div.appendChild(img);
-                    
-                    if (!box.opened) {
-                        div.onclick = () => openBox(box.id, div);
-                    }
-                    
-                    boxesContainer.appendChild(div);
-                });
-                
-                updateCounters();
-            });
-    }
-    
-    function updateCounters() {
-        fetch('/lab9/api/status')
-            .then(r => r.json())
-            .then(data => {
-                openedCountSpan.textContent = data.opened_count;
-                remainingBoxesSpan.textContent = data.remaining;
-            });
-    }
-    
-    function openBox(boxId, boxElement) {
-        fetch('/lab9/api/open_box', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ box_id: boxId })
-        })
-        .then(r => r.json())
-        .then(result => {
-            if (result.error) {
-                messageArea.innerHTML = `<div class="error">${result.error}</div>`;
-                return;
-            }
-            
-            boxElement.className = 'box opened';
-            boxElement.onclick = null;
-            
-            openedCountSpan.textContent = result.opened_count;
-            remainingBoxesSpan.textContent = result.remaining;
-            
-            messageArea.innerHTML = `
-                <div class="congrats">
-                    <h3>С Новым Годом!</h3>
-                    <p>${result.congratulation}</p>
-                    <img src="${result.box_image}" alt="Подарок">
+<div class="boxes-container">
+    {% if boxes %}
+        {% for box in boxes %}
+        <div class="box-wrapper" style="top: {{ box.top }}%; left: {{ box.left }}%;">
+            <div class="box {% if box.opened %}opened{% endif %}">
+                {% if box.can_open %}
+                <form action="/lab9/open_box" method="post">
+                    <input type="hidden" name="box_id" value="{{ box.id }}">
+                    <button type="submit" class="box-btn">
+                        <img src="{{ box.gift_image }}" alt="Коробка {{ box.number }}">
+                        {% if box.opened %}<span class="opened-label">✓</span>{% endif %}
+                    </button>
+                </form>
+                {% else %}
+                <div class="box-btn">
+                    <img src="{{ box.gift_image }}" alt="Коробка {{ box.number }}">
+                    {% if box.opened %}
+                    <span class="opened-label">✓</span>
+                    {% elif box.require_auth and not auth %}
+                    <span class="lock-label">🔒</span>
+                    {% endif %}
                 </div>
-            `;
-        });
-    }
-    
-    resetButton.onclick = () => {
-        if (confirm('Сбросить все коробки?')) {
-            fetch('/lab9/api/reset', {method: 'POST'})
-                .then(r => r.json())
-                .then(() => {
-                    loadBoxes();
-                    messageArea.innerHTML = 'Все коробки сброшены';
-                });
-        }
-    };
-    
-    loadBoxes();
-});
-</script>
+                {% endif %}
+                <div class="box-number">{{ box.number }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="loading">Загрузка...</div>
+    {% endif %}
+</div>
+
+{% if last_gift %}
+<div class="gift-display">
+    <h3>🎉 Коробка №{{ last_gift.box_number }} открыта!</h3>
+    <p class="congrats">{{ last_gift.congratulation }}</p>
+    <img src="{{ last_gift.gift_image }}" alt="Подарок" class="gift-img">
+</div>
+{% elif opened_count >= 3 %}
+<div class="message">
+    <p>🎊 Вы открыли все 3 коробки!</p>
+</div>
+{% else %}
+<div class="message">
+    <p>Нажмите на коробку, чтобы открыть подарок</p>
+</div>
+{% endif %}
 {% endblock %}

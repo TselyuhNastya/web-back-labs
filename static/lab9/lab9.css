@@ -1,98 +1,271 @@
-.new-year-theme {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px solid red;
-}
 
-.info {
-    background: #ffe6e6;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.info p {
-    margin: 0;
-    font-weight: bold;
-}
-
-.info span {
-    color: red;
-    font-size: 20px;
-}
-
-#reset-button {
-    background: red;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#reset-button:hover {
-    background: darkred;
-}
-
-.boxes {
-    position: relative;
-    height: 400px;
-    background: #fff;
-    border-radius: 8px;
-    border: 2px solid #ffcccc;
+h1 {
+    text-align: center;
+    color: #ff0000;
     margin: 20px 0;
 }
 
-.box {
-    position: absolute;
+/* Информация пользователя */
+.user-info {
+    background: #ffebee;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 800px;
+    text-align: center;
+    border: 1px solid #ffcdd2;
+}
+
+.user-info a {
+    color: #2196f3;
+    margin: 0 10px;
+}
+
+/* Кнопка Деда Мороза */
+.santa-form {
+    display: inline;
+    margin-left: 20px;
+}
+
+.santa-btn {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
     cursor: pointer;
-    transform: translate(-50%, -50%);
 }
 
-.box img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
+.santa-btn:hover {
+    background: #b71c1c;
 }
 
-.box:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-}
-
-.box.opened {
-    opacity: 0.6;
-    cursor: default;
-}
-
-.box.opened:hover {
-    transform: translate(-50%, -50%);
-}
-
-.message {
-    background: #ffe6e6;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
+/* Сообщения */
+.error, .success {
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 800px;
+    border-radius: 5px;
     text-align: center;
 }
 
-.congrats h3 {
-    color: red;
+.error {
+    background: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+}
+
+.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+/* Статистика */
+.stats {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.stats a {
+    color: #2196f3;
+    margin: 0 10px;
+}
+
+/* Контейнер коробок */
+.boxes-container {
+    position: relative;
+    width: 900px;
+    height: 350px;
+    margin: 20px auto;
+    background: white;
+    border: 2px solid #ff0000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.box-wrapper {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+.box {
+    text-align: center;
+}
+
+.box-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.box-btn img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.box-btn:hover:not(:disabled) img {
+    transform: scale(1.1);
+}
+
+.box.opened .box-btn {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.opened-label {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #4caf50;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.lock-label {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #e8971c;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.box-number {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #d32f2f;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #666;
+}
+
+/* Показ подарка */
+.gift-display, .message {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #ff0000;
+    text-align: center;
+}
+
+.gift-display h3 {
+    color: #ff0000;
     margin-top: 0;
 }
 
-.congrats img {
-    max-width: 150px;
-    border-radius: 8px;
-    border: 2px solid red;
-    margin-top: 10px;
+.congrats {
+    font-size: 18px;
+    color: #5d4037;
+    margin: 15px 0;
+    font-style: italic;
 }
 
-.error {
-    color: darkred;
+.gift-img {
+    max-width: 200px;
+    max-height: 200px;
+    border: 2px solid #5d4037;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.gift-display a {
+    color: #2196f3;
     font-weight: bold;
+}
+
+.message p {
+    font-size: 18px;
+    color: #666;
+}
+
+/* Формы входа/регистрации */
+.login-container, .register-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #ffcccc;
+}
+
+.login-container h2, .register-container h2 {
+    text-align: center;
+    color: #d32f2f;
+    margin-top: 0;
+}
+
+.login-container div, .register-container div {
+    margin-bottom: 15px;
+}
+
+.login-container label, .register-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.login-container input, .register-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login-container button, .register-container button {
+    width: 100%;
+    padding: 10px;
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-container button:hover, .register-container button:hover {
+    background: #b71c1c;
+}
+
+.login-container .error, .register-container .error {
+    background: #ffebee;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.login-container .success, .register-container .success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.login-container p, .register-container p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login-container a, .register-container a {
+    color: #2196f3;
 }
