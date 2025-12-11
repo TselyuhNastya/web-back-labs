@@ -2,8 +2,113 @@
 
 {% block lab %}Лабораторная работа 9{% endblock %}
 
-{% block script %} {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='lab9/lab9.css') }}">
+{% endblock %}
 
 {% block main %}
-   <h1>Поздравления</h1>
+<h1>Новогодние поздравления</h1>
+
+<div class="new-year-theme">
+    <div class="info">
+        <p>Открыто: <span id="opened-count">0</span>/3</p>
+        <p>Осталось: <span id="remaining-boxes">10</span></p>
+        <button id="reset-button">Заново</button>
+    </div>
+
+    <div class="boxes" id="boxes-container"></div>
+
+    <div class="message" id="message-area">
+        Нажмите на коробку, чтобы открыть подарок
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const boxesContainer = document.getElementById('boxes-container');
+    const messageArea = document.getElementById('message-area');
+    const openedCountSpan = document.getElementById('opened-count');
+    const remainingBoxesSpan = document.getElementById('remaining-boxes');
+    const resetButton = document.getElementById('reset-button');
+
+    function loadBoxes() {
+        fetch('/lab9/api/get_boxes')
+            .then(r => r.json())
+            .then(data => {
+                boxesContainer.innerHTML = '';
+                data.boxes.forEach(box => {
+                    const div = document.createElement('div');
+                    div.className = box.opened ? 'box opened' : 'box';
+                    div.dataset.id = box.id;
+                    div.style.top = box.top + '%';
+                    div.style.left = box.left + '%';
+                    
+                    const img = document.createElement('img');
+                    img.src = box.gift_image;
+                    img.alt = 'Коробка';
+                    div.appendChild(img);
+                    
+                    if (!box.opened) {
+                        div.onclick = () => openBox(box.id, div);
+                    }
+                    
+                    boxesContainer.appendChild(div);
+                });
+                
+                updateCounters();
+            });
+    }
+    
+    function updateCounters() {
+        fetch('/lab9/api/status')
+            .then(r => r.json())
+            .then(data => {
+                openedCountSpan.textContent = data.opened_count;
+                remainingBoxesSpan.textContent = data.remaining;
+            });
+    }
+    
+    function openBox(boxId, boxElement) {
+        fetch('/lab9/api/open_box', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ box_id: boxId })
+        })
+        .then(r => r.json())
+        .then(result => {
+            if (result.error) {
+                messageArea.innerHTML = `<div class="error">${result.error}</div>`;
+                return;
+            }
+            
+            boxElement.className = 'box opened';
+            boxElement.onclick = null;
+            
+            openedCountSpan.textContent = result.opened_count;
+            remainingBoxesSpan.textContent = result.remaining;
+            
+            messageArea.innerHTML = `
+                <div class="congrats">
+                    <h3>С Новым Годом!</h3>
+                    <p>${result.congratulation}</p>
+                    <img src="${result.box_image}" alt="Подарок">
+                </div>
+            `;
+        });
+    }
+    
+    resetButton.onclick = () => {
+        if (confirm('Сбросить все коробки?')) {
+            fetch('/lab9/api/reset', {method: 'POST'})
+                .then(r => r.json())
+                .then(() => {
+                    loadBoxes();
+                    messageArea.innerHTML = 'Все коробки сброшены';
+                });
+        }
+    };
+    
+    loadBoxes();
+});
+</script>
 {% endblock %}

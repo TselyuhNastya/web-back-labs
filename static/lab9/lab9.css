@@ -1,0 +1,98 @@
+.new-year-theme {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid red;
+}
+
+.info {
+    background: #ffe6e6;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.info p {
+    margin: 0;
+    font-weight: bold;
+}
+
+.info span {
+    color: red;
+    font-size: 20px;
+}
+
+#reset-button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#reset-button:hover {
+    background: darkred;
+}
+
+.boxes {
+    position: relative;
+    height: 400px;
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #ffcccc;
+    margin: 20px 0;
+}
+
+.box {
+    position: absolute;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+}
+
+.box img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.box:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.box.opened {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.box.opened:hover {
+    transform: translate(-50%, -50%);
+}
+
+.message {
+    background: #ffe6e6;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.congrats h3 {
+    color: red;
+    margin-top: 0;
+}
+
+.congrats img {
+    max-width: 150px;
+    border-radius: 8px;
+    border: 2px solid red;
+    margin-top: 10px;
+}
+
+.error {
+    color: darkred;
+    font-weight: bold;
+}
