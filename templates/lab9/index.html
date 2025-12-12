@@ -51,9 +51,6 @@
     function openBox(boxId) {
         fetch(`/lab9/rest-api/boxes/${boxId}/open`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
         })
         .then(response => {
             if (!response.ok) {
@@ -86,9 +83,6 @@
         
         fetch('/lab9/rest-api/boxes/reset', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
         })
         .then(response => {
             if (!response.ok) {
