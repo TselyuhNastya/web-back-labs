@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, session, redirect, url_for, current_app, jsonify
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import sqlite3
@@ -58,8 +58,9 @@ def db_close(conn, cur):
 def is_authenticated():
     return 'login' in session
 
-@lab9.route('/lab9/')
-def main():
+@lab9.route('/lab9/rest-api/session', methods=['GET'])
+def get_session_info():
+    """Получить информацию о сессии и коробках"""
     if 'lab9_session_id' not in session:
         session['lab9_session_id'] = str(uuid.uuid4())
     
@@ -90,67 +91,89 @@ def main():
             
             boxes.append({
                 'id': i,
-                'number': i + 1,  # Номер для отображения (1-10)
+                'number': i + 1,
                 'top': POSITIONS[i][0],
                 'left': POSITIONS[i][1],
                 'opened': opened,
                 'can_open': can_open,
                 'gift_image': box_images[i],
-                'require_auth': i >= 5
+                'require_auth': i >= 5,
+                'congratulation': congratulations[i],
+                'inner_gift_image': gift_images[i]
             })
         
-        # Последний открытый подарок
-        last_gift = None
-        if 'last_opened_gift' in session:
-            gift_id = session['last_opened_gift']
-            last_gift = {
-                'congratulation': congratulations[gift_id],
-                'gift_image': gift_images[gift_id],
-                'box_number': gift_id + 1  # Показываем номер коробки (1-10)
+        return jsonify({
+            'session_id': session_id,
+            'authenticated': is_auth,
+            'login': session.get('login'),
+            'boxes': boxes,
+            'stats': {
+                'opened_count': opened_count,
+                'remaining': 10 - opened_count,
+                'max_open': 3
             }
-        
-        return render_template('lab9/index.html',
-                             auth=is_auth,
-                             login=session.get('login'),
-                             boxes=boxes,
-                             opened_count=opened_count,
-                             remaining=10 - opened_count,
-                             last_gift=last_gift)
+        })
         
     except Exception as e:
-        error_msg = str(e).replace('\n', ' ')
-        return render_template('lab9/index.html',
-                             auth=is_auth,
-                             login=session.get('login'),
-                             boxes=[],
-                             opened_count=0,
-                             remaining=10,
-                             error=f"Ошибка: {error_msg}")
+        return jsonify({'error': str(e)}), 500
     
     finally:
         db_close(conn, cur)
 
-@lab9.route('/lab9/open_box', methods=['POST'])
-def open_box():
+@lab9.route('/lab9/rest-api/boxes/<int:box_id>', methods=['GET'])
+def get_box(box_id):
+    """Получить информацию о конкретной коробке"""
+    if box_id < 0 or box_id > 9:
+        return jsonify({'error': 'Коробка не найдена'}), 404
+    
+    is_auth = is_authenticated()
+    
+    # Проверяем открыта ли коробка в сессии
+    session_id = session.get('lab9_session_id')
+    opened = False
+    
+    if session_id:
+        conn, cur = db_connect()
+        try:
+            if current_app.config['DB_TYPE'] == 'postgres':
+                cur.execute("SELECT opened FROM lab9_boxes WHERE session_id = %s AND box_id = %s", (session_id, box_id))
+            else:
+                cur.execute("SELECT opened FROM lab9_boxes WHERE session_id = ? AND box_id = ?", (session_id, box_id))
+            
+            result = cur.fetchone()
+            if result:
+                opened = result['opened']
+        finally:
+            db_close(conn, cur)
+    
+    return jsonify({
+        'id': box_id,
+        'number': box_id + 1,
+        'top': POSITIONS[box_id][0],
+        'left': POSITIONS[box_id][1],
+        'congratulation': congratulations[box_id],
+        'gift_image': box_images[box_id],
+        'inner_gift_image': gift_images[box_id],
+        'require_auth': box_id >= 5,
+        'opened': opened,
+        'can_open': (box_id < 5 or is_auth) and not opened
+    })
+
+@lab9.route('/lab9/rest-api/boxes/<int:box_id>/open', methods=['POST'])
+def open_box_rest(box_id):
+    """Открыть коробку (REST версия)"""
     if 'lab9_session_id' not in session:
-        return redirect('/lab9/')
+        return jsonify({'error': 'Сессия не найдена'}), 401
+    
+    if box_id < 0 or box_id > 9:
+        return jsonify({'error': 'Коробка не найдена'}), 404
     
     session_id = session['lab9_session_id']
     is_auth = is_authenticated()
-    box_id = request.form.get('box_id')
-    
-    if not box_id or not box_id.isdigit():
-        return redirect('/lab9/')
-    
-    box_id = int(box_id)
-    
-    if box_id < 0 or box_id > 9:
-        return redirect('/lab9/')
     
     # Проверяем доступность для авторизации
-    # Коробки с индексами 5-9 (номера 6-10) требуют авторизации
     if box_id >= 5 and not is_auth:
-        return redirect('/lab9/?error=Коробка №' + str(box_id + 1) + ' только для авторизованных')
+        return jsonify({'error': f'Коробка №{box_id + 1} только для авторизованных'}), 403
     
     conn, cur = db_connect()
     
@@ -165,8 +188,7 @@ def open_box():
         opened_count = result['count'] if result else 0
         
         if opened_count >= 3:
-            db_close(conn, cur)
-            return redirect('/lab9/?error=Максимум 3 коробки')
+            return jsonify({'error': 'Максимум 3 коробки'}), 400
         
         # Проверяем открыта ли уже
         if current_app.config['DB_TYPE'] == 'postgres':
@@ -177,8 +199,7 @@ def open_box():
         existing = cur.fetchone()
         
         if existing and existing['opened']:
-            db_close(conn, cur)
-            return redirect('/lab9/?error=Коробка №' + str(box_id + 1) + ' уже открыта')
+            return jsonify({'error': f'Коробка №{box_id + 1} уже открыта'}), 400
         
         # Открываем
         if existing:
@@ -195,22 +216,36 @@ def open_box():
         # Сохраняем для показа
         session['last_opened_gift'] = box_id
         
+        gift_data = {
+            'id': box_id,
+            'number': box_id + 1,
+            'success': True,
+            'message': f'Коробка №{box_id + 1} успешно открыта',
+            'congratulation': congratulations[box_id],
+            'gift_image': gift_images[box_id],
+            'stats': {
+                'opened_count': opened_count + 1,
+                'remaining': 10 - (opened_count + 1),
+                'max_open': 3
+            }
+        }
+        
         db_close(conn, cur)
-        return redirect('/lab9/')
+        return jsonify(gift_data), 200
         
     except Exception as e:
         db_close(conn, cur)
-        error_msg = str(e).replace('\n', ' ')
-        return redirect(f'/lab9/?error={error_msg}')
+        return jsonify({'error': str(e)}), 500
 
-@lab9.route('/lab9/santa', methods=['POST'])
-def santa():
+@lab9.route('/lab9/rest-api/boxes/reset', methods=['POST'])
+def reset_boxes_rest():
+    """Сбросить все открытые коробки (Дед Мороз)"""
     if not is_authenticated():
-        return redirect('/lab9/?error=Только для авторизованных')
+        return jsonify({'error': 'Только для авторизованных'}), 403
     
     session_id = session.get('lab9_session_id')
     if not session_id:
-        return redirect('/lab9/')
+        return jsonify({'error': 'Сессия не найдена'}), 401
     
     conn, cur = db_connect()
     
@@ -224,12 +259,37 @@ def santa():
             session.pop('last_opened_gift')
         
         db_close(conn, cur)
-        return redirect('/lab9/?message=Коробки сброшены')
+        return jsonify({
+            'success': True,
+            'message': 'Все коробки сброшены и готовы к открытию!'
+        }), 200
         
     except Exception as e:
         db_close(conn, cur)
-        error_msg = str(e).replace('\n', ' ')
-        return redirect(f'/lab9/?error={error_msg}')
+        return jsonify({'error': str(e)}), 500
+
+@lab9.route('/lab9/')
+def main():
+    """Главная страница - только отображает шаблон, данные загружаются через REST API"""
+    return render_template('lab9/index.html',
+                         auth=is_authenticated(),
+                         login=session.get('login'))
+
+
+@lab9.route('/lab9/open_box', methods=['POST'])
+def open_box():
+    """Старая версия открытия коробки (для совместимости)"""
+    # Перенаправляем на REST API
+    box_id = request.form.get('box_id')
+    if box_id and box_id.isdigit():
+        return redirect(f'/lab9/rest-api/boxes/{int(box_id)}/open')
+    return redirect('/lab9/')
+
+@lab9.route('/lab9/santa', methods=['POST'])
+def santa():
+    """Старая версия сброса коробок (для совместимости)"""
+    # Перенаправляем на REST API
+    return redirect('/lab9/rest-api/boxes/reset')
 
 @lab9.route('/lab9/register', methods=['GET', 'POST'])
 def register():
