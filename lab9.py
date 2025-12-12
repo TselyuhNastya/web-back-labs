@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 lab9 = Blueprint('lab9', __name__)
 
+# Данные для коробок
 congratulations = [
     "С Новым годом! Пусть сбываются мечты!",
     "Желаю здоровья, счастья и удачи!",
@@ -22,16 +23,17 @@ congratulations = [
     "Творческих успехов!"
 ]
 
-box_images = [f"/static/lab9/box{i+1}.png" for i in range(10)]
-gift_images = [f"/static/lab9/gift{i+1}.jpg" for i in range(10)]
+gift_images = [f"/static/lab9/box{i+1}.png" for i in range(10)]
+box_images = [f"/static/lab9/gift{i+1}.jpg" for i in range(10)]
 
+# Фиксированные позиции
 POSITIONS = [
     (15, 10), (25, 30), (40, 15), (60, 25), (20, 50),
-    (35, 65), (55, 45), (70, 35), (45, 75), (65, 80)
+    (35, 65), (55, 45), (80, 35), (50, 75), (80, 80)
 ]
 
 def db_connect():
-    if current_app.config.get('DB_TYPE') == 'postgres':
+    if current_app.config['DB_TYPE'] == 'postgres':
         conn = psycopg2.connect(
             host='127.0.0.1',
             database='nastya_tselukh_knowledge_base',
@@ -56,20 +58,6 @@ def db_close(conn, cur):
 def is_authenticated():
     return 'login' in session
 
-def get_boolean_value(value):
-    """Возвращает правильное булево значение для текущей БД"""
-    if current_app.config.get('DB_TYPE') == 'postgres':
-        return value  # True/False для PostgreSQL
-    else:
-        return 1 if value else 0  # 1/0 для SQLite
-
-def execute_query(cur, query, params):
-    """Универсальное выполнение запроса"""
-    # Заменяем %s на ? для SQLite если нужно
-    if current_app.config.get('DB_TYPE') != 'postgres':
-        query = query.replace('%s', '?')
-    cur.execute(query, params)
-
 @lab9.route('/lab9/')
 def main():
     if 'lab9_session_id' not in session:
@@ -81,14 +69,16 @@ def main():
     conn, cur = db_connect()
     
     try:
-        # Универсальный запрос для обеих БД
-        query = "SELECT box_id FROM lab9_boxes WHERE session_id = %s AND opened = %s"
-        opened_value = get_boolean_value(True)
-        execute_query(cur, query, (session_id, opened_value))
+        # Получаем открытые коробки
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT box_id FROM lab9_boxes WHERE session_id = %s AND opened = TRUE", (session_id,))
+        else:
+            cur.execute("SELECT box_id FROM lab9_boxes WHERE session_id = ? AND opened = 1", (session_id,))
         
         opened_boxes = [row['box_id'] for row in cur.fetchall()]
         opened_count = len(opened_boxes)
         
+        # Создаем список коробок
         boxes = []
         for i in range(10):
             opened = i in opened_boxes
@@ -100,7 +90,7 @@ def main():
             
             boxes.append({
                 'id': i,
-                'number': i + 1,
+                'number': i + 1,  # Номер для отображения (1-10)
                 'top': POSITIONS[i][0],
                 'left': POSITIONS[i][1],
                 'opened': opened,
@@ -109,13 +99,14 @@ def main():
                 'require_auth': i >= 5
             })
         
+        # Последний открытый подарок
         last_gift = None
         if 'last_opened_gift' in session:
             gift_id = session['last_opened_gift']
             last_gift = {
                 'congratulation': congratulations[gift_id],
                 'gift_image': gift_images[gift_id],
-                'box_number': gift_id + 1
+                'box_number': gift_id + 1  # Показываем номер коробки (1-10)
             }
         
         return render_template('lab9/index.html',
@@ -156,6 +147,8 @@ def open_box():
     if box_id < 0 or box_id > 9:
         return redirect('/lab9/')
     
+    # Проверяем доступность для авторизации
+    # Коробки с индексами 5-9 (номера 6-10) требуют авторизации
     if box_id >= 5 and not is_auth:
         return redirect('/lab9/?error=Коробка №' + str(box_id + 1) + ' только для авторизованных')
     
@@ -163,9 +156,10 @@ def open_box():
     
     try:
         # Сколько уже открыто
-        query = "SELECT COUNT(*) as count FROM lab9_boxes WHERE session_id = %s AND opened = %s"
-        opened_value = get_boolean_value(True)
-        execute_query(cur, query, (session_id, opened_value))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT COUNT(*) as count FROM lab9_boxes WHERE session_id = %s AND opened = TRUE", (session_id,))
+        else:
+            cur.execute("SELECT COUNT(*) as count FROM lab9_boxes WHERE session_id = ? AND opened = 1", (session_id,))
         
         result = cur.fetchone()
         opened_count = result['count'] if result else 0
@@ -175,8 +169,10 @@ def open_box():
             return redirect('/lab9/?error=Максимум 3 коробки')
         
         # Проверяем открыта ли уже
-        query = "SELECT opened FROM lab9_boxes WHERE session_id = %s AND box_id = %s"
-        execute_query(cur, query, (session_id, box_id))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("SELECT opened FROM lab9_boxes WHERE session_id = %s AND box_id = %s", (session_id, box_id))
+        else:
+            cur.execute("SELECT opened FROM lab9_boxes WHERE session_id = ? AND box_id = ?", (session_id, box_id))
         
         existing = cur.fetchone()
         
@@ -184,14 +180,19 @@ def open_box():
             db_close(conn, cur)
             return redirect('/lab9/?error=Коробка №' + str(box_id + 1) + ' уже открыта')
         
-        # Открываем коробку
+        # Открываем
         if existing:
-            query = "UPDATE lab9_boxes SET opened = %s WHERE session_id = %s AND box_id = %s"
-            execute_query(cur, query, (get_boolean_value(True), session_id, box_id))
+            if current_app.config['DB_TYPE'] == 'postgres':
+                cur.execute("UPDATE lab9_boxes SET opened = TRUE WHERE session_id = %s AND box_id = %s", (session_id, box_id))
+            else:
+                cur.execute("UPDATE lab9_boxes SET opened = 1 WHERE session_id = ? AND box_id = ?", (session_id, box_id))
         else:
-            query = "INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (%s, %s, %s)"
-            execute_query(cur, query, (session_id, box_id, get_boolean_value(True)))
+            if current_app.config['DB_TYPE'] == 'postgres':
+                cur.execute("INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (%s, %s, TRUE)", (session_id, box_id))
+            else:
+                cur.execute("INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (?, ?, 1)", (session_id, box_id))
         
+        # Сохраняем для показа
         session['last_opened_gift'] = box_id
         
         db_close(conn, cur)
@@ -214,8 +215,10 @@ def santa():
     conn, cur = db_connect()
     
     try:
-        query = "DELETE FROM lab9_boxes WHERE session_id = %s"
-        execute_query(cur, query, (session_id,))
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute("DELETE FROM lab9_boxes WHERE session_id = %s", (session_id,))
+        else:
+            cur.execute("DELETE FROM lab9_boxes WHERE session_id = ?", (session_id,))
         
         if 'last_opened_gift' in session:
             session.pop('last_opened_gift')
@@ -242,7 +245,7 @@ def register():
     conn, cur = db_connect()
     
     try:
-        if current_app.config.get('DB_TYPE') == 'postgres':
+        if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT login FROM users WHERE login = %s", (login,))
         else:
             cur.execute("SELECT login FROM users WHERE login = ?", (login,))
@@ -252,7 +255,7 @@ def register():
         
         password_hash = generate_password_hash(password)
         
-        if current_app.config.get('DB_TYPE') == 'postgres':
+        if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("INSERT INTO users (login, password) VALUES (%s, %s)", (login, password_hash))
         else:
             cur.execute("INSERT INTO users (login, password) VALUES (?, ?)", (login, password_hash))
@@ -280,7 +283,7 @@ def login():
     conn, cur = db_connect()
     
     try:
-        if current_app.config.get('DB_TYPE') == 'postgres':
+        if current_app.config['DB_TYPE'] == 'postgres':
             cur.execute("SELECT * FROM users WHERE login = %s", (login_val,))
         else:
             cur.execute("SELECT * FROM users WHERE login = ?", (login_val,))
@@ -296,7 +299,7 @@ def login():
         session['login'] = login_val
         session['user_id'] = user['id']
         
-        return redirect('/lab9/?message=Вы вошли')
+        return redirect('/lab9/')
         
     except Exception as e:
         error_msg = str(e).replace('\n', ' ')
@@ -312,4 +315,3 @@ def logout():
     session.pop('lab9_session_id', None)
     session.pop('last_opened_gift', None)
     return redirect('/lab9/?message=Вы вышли')
-    
