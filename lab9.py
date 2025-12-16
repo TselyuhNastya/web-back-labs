@@ -109,7 +109,6 @@ def get_session_info():
         }
     })
 
-
 #открываем коробку
 @lab9.route('/lab9/rest-api/boxes/<int:box_id>/open', methods=['POST'])
 def open_box_rest(box_id):
@@ -153,14 +152,16 @@ def open_box_rest(box_id):
             return jsonify({'error': f'Коробка №{box_id + 1} уже открыта'}), 400
         
         # Открываем коробку 
-        if existing:
-            query = "UPDATE lab9_boxes SET opened = %s WHERE session_id = %s AND box_id = %s"
-            values = (True, session_id, box_id) if current_app.config['DB_TYPE'] == 'postgres' else (1, session_id, box_id)
+        if current_app.config['DB_TYPE'] == 'postgres':
+            if existing:
+                cur.execute("UPDATE lab9_boxes SET opened = TRUE WHERE session_id = %s AND box_id = %s", (session_id, box_id))
+            else:
+                cur.execute("INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (%s, %s, TRUE)", (session_id, box_id))
         else:
-            query = "INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (%s, %s, %s)"
-            values = (session_id, box_id, True) if current_app.config['DB_TYPE'] == 'postgres' else (session_id, box_id, 1)
-        
-        cur.execute(query, values)
+            if existing:
+                cur.execute("UPDATE lab9_boxes SET opened = 1 WHERE session_id = ? AND box_id = ?", (session_id, box_id))
+            else:
+                cur.execute("INSERT INTO lab9_boxes (session_id, box_id, opened) VALUES (?, ?, 1)", (session_id, box_id))
         
         session['last_opened_gift'] = box_id
         
@@ -185,7 +186,7 @@ def open_box_rest(box_id):
     finally:
         cur.close()
         conn.close()
-
+        
 
 #Сбросить все открытые коробки (Дед Мороз)
 @lab9.route('/lab9/rest-api/boxes/reset', methods=['POST'])
