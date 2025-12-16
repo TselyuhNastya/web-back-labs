@@ -147,7 +147,7 @@ def open_box_rest(box_id):
         existing = cur.fetchone()
         
         if existing and existing['opened']:
-            cur.close()  # ← Закрываем перед выходом
+            cur.close()  
             conn.close()
             return jsonify({'error': f'Коробка №{box_id + 1} уже открыта'}), 400
         
@@ -165,7 +165,7 @@ def open_box_rest(box_id):
         
         session['last_opened_gift'] = box_id
         
-        db_close(conn, cur) 
+        db_close(conn, cur)  
         
         return jsonify({
             'id': box_id,
@@ -183,10 +183,7 @@ def open_box_rest(box_id):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    finally:
-        cur.close()
-        conn.close()
-        
+
 
 #Сбросить все открытые коробки (Дед Мороз)
 @lab9.route('/lab9/rest-api/boxes/reset', methods=['POST'])
