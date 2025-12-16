@@ -71,7 +71,7 @@ def login():
         return render_template('lab8/login.html', error='Неверный логин или пароль', registered=registered)
 
 @lab8.route('/lab8/logout')
-@login_required
+@login_required #проверка авторизации
 def logout():
     logout_user()
     return redirect('/lab8/')
@@ -102,7 +102,6 @@ def create():
         article_text=article_text,
         is_public=is_public,
         is_favorite=is_favorite,
-        likes=0
     )
     
     db.session.add(new_article)
@@ -138,6 +137,7 @@ def edit_article(article_id):
     
     return redirect('/lab8/articles')
 
+
 @lab8.route('/lab8/delete/<int:article_id>')
 @login_required
 def delete_article(article_id):
@@ -169,7 +169,7 @@ def search_articles():
     # Преобразуем запрос в нижний регистр
     search_query_lower = search_query.lower()
     
-    # Получаем ВСЕ статьи, а затем фильтруем в Python
+    # Получаем ВСЕ статьи, а затем фильтруем 
     if current_user.is_authenticated:
         all_articles = articles.query.filter(
             or_(

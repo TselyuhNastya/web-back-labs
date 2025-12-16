@@ -8,307 +8,182 @@
 
 {% block script %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Загружаем начальные данные
-        loadSessionInfo();
-        
-        // Обработчик для кнопки Дед Мороз
-        const santaBtn = document.querySelector('.santa-btn');
-        if (santaBtn) {
-            santaBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                resetAllBoxes();
-            });
-        }
-    });
+    // Загружаем данные при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadSessionInfo);
     
-    // Загрузить информацию о сессии и коробках
+    // Загрузка данных о коробках
     function loadSessionInfo() {
         fetch('/lab9/rest-api/session')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Ошибка сети');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-                
-                // Обновляем UI
-                updateUI(data);
-                generateBoxes(data.boxes);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showError('Ошибка загрузки данных');
-            });
+        .then(function(response) {
+            if (!response.ok) throw new Error('Ошибка сети');
+            return response.json();
+        })
+        .then(function(data) {
+            if (data.error) throw new Error(data.error);
+            updateUI(data);
+            generateBoxes(data.boxes);
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            showError(error.message);
+        });
     }
     
-    // Открыть конкретную коробку
+    // Открытие коробки
     function openBox(boxId) {
-        fetch(`/lab9/rest-api/boxes/${boxId}/open`, {
-            method: 'POST',
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.error || 'Ошибка сервера');
-                });
-            }
+        fetch(`/lab9/rest-api/boxes/${boxId}/open`, {method: 'POST'})
+        .then(function(response) {
             return response.json();
         })
-        .then(data => {
-            if (data.error) {
-                showError(data.error);
-            } else {
-                showGift(data);
-                // Обновляем информацию о сессии
-                loadSessionInfo();
-            }
+        .then(function(data) {
+            if (data.error) throw new Error(data.error);
+            showGift(data);
+            loadSessionInfo();
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch(function(error) {
             showError(error.message);
         });
     }
     
-    // Сбросить все коробки
+    // Сброс коробок
     function resetAllBoxes() {
-        if (!confirm('Вы уверены, что хотите сбросить все коробки? Дед Мороз наполнит их заново!')) {
-            return;
-        }
+        if (!confirm('Вы уверены, что хотите сбросить все коробки?')) return;
         
-        fetch('/lab9/rest-api/boxes/reset', {
-            method: 'POST',
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.error || 'Ошибка сервера');
-                });
-            }
+        fetch('/lab9/rest-api/boxes/reset', {method: 'POST'})
+        .then(function(response) {
             return response.json();
         })
-        .then(data => {
-            if (data.error) {
-                showError(data.error);
-            } else {
-                showSuccess(data.message);
-                // Обновляем информацию о сессии
-                loadSessionInfo();
-                hideGiftDisplay();
-            }
+        .then(function(data) {
+            if (data.error) throw new Error(data.error);
+            showSuccess(data.message);
+            loadSessionInfo();
+            hideGiftDisplay();
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch(function(error) {
             showError(error.message);
         });
     }
     
-    // Обновить UI на основе данных
+    // Обновление интерфейса
     function updateUI(data) {
-        // Статистика
-        const openedCount = data.stats.opened_count;
-        const remaining = data.stats.remaining;
-        const maxOpen = data.stats.max_open;
-        
-        document.getElementById('opened-count').textContent = openedCount;
-        document.getElementById('remaining-count').textContent = remaining;
+        document.getElementById('opened-count').textContent = data.stats.opened_count;
+        document.getElementById('remaining-count').textContent = data.stats.remaining;
         
         // Информация о пользователе
-        updateUserInfo(data.authenticated, data.login);
-        
-        // Сообщение если все открыто
-        const messageElement = document.querySelector('.message p');
-        if (openedCount >= maxOpen) {
-            messageElement.textContent = 'Вы открыли все доступные коробки!';
-            messageElement.style.color = '#4CAF50';
-        } else {
-            messageElement.textContent = 'Нажмите на коробку, чтобы открыть подарок';
-            messageElement.style.color = '';
+        if (data.authenticated) {
+        const userInfo = document.querySelector('.user-info');
+        if (userInfo) {
+            const span = userInfo.querySelector('span') || document.createElement('span');
+            span.textContent = 'Вы вошли как: ' + data.login;
+            userInfo.prepend(span);
         }
-    }
-    
-    function updateUserInfo(isAuth, login) {
-        const userInfoElement = document.querySelector('.user-info');
-        const authLinksElement = document.querySelector('.stats p:nth-child(2)');
+    }        
+        // Скрываем/показываем ссылки на вход
+        const authLinks = document.querySelector('.stats p:nth-child(2)');
+        if (authLinks) authLinks.style.display = data.authenticated ? 'none' : 'block';
         
-        if (isAuth && userInfoElement) {
-            const span = userInfoElement.querySelector('span') || document.createElement('span');
-            span.textContent = `Вы вошли как: ${login}`;
-            if (!userInfoElement.querySelector('span')) {
-                userInfoElement.prepend(span);
-            }
-        }
-        
-        if (authLinksElement) {
-            authLinksElement.style.display = isAuth ? 'none' : 'block';
-        }
-    }
-    
-    // Генерировать коробки
-    function generateBoxes(boxes) {
-        const container = document.querySelector('.boxes-container');
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
-        boxes.forEach(box => {
-            const boxWrapper = document.createElement('div');
-            boxWrapper.className = 'box-wrapper';
-            boxWrapper.style.top = `${box.top}%`;
-            boxWrapper.style.left = `${box.left}%`;
-            
-            const boxDiv = document.createElement('div');
-            boxDiv.className = `box ${box.opened ? 'opened' : ''}`;
-            
-            if (box.can_open && !box.opened) {
-                const button = document.createElement('button');
-                button.className = 'box-btn';
-                button.type = 'button';
-                button.onclick = () => openBox(box.id);
-                
-                const img = document.createElement('img');
-                img.src = box.gift_image;
-                img.alt = `Коробка ${box.number}`;
-                
-                button.appendChild(img);
-                boxDiv.appendChild(button);
+        // Сообщение
+        const message = document.querySelector('.message p');
+        if (message) {
+            if (data.stats.opened_count >= data.stats.max_open) {
+                message.textContent = 'Вы открыли все доступные коробки!';
+                message.style.color = '#4CAF50';
             } else {
-                const div = document.createElement('div');
-                div.className = 'box-btn';
-                
-                const img = document.createElement('img');
-                img.src = box.gift_image;
-                img.alt = `Коробка ${box.number}`;
-                
-                div.appendChild(img);
-                
-                if (box.opened) {
-                    const span = document.createElement('span');
-                    span.className = 'opened-label';
-                    span.textContent = '✓';
-                    div.appendChild(span);
-                } else if (box.require_auth) {
-                    const span = document.createElement('span');
-                    span.className = 'lock-label';
-                    span.textContent = '🔒';
-                    div.appendChild(span);
-                }
-                
-                boxDiv.appendChild(div);
+                message.textContent = 'Нажмите на коробку, чтобы открыть подарок';
+                message.style.color = '';
             }
-            
-            const numberDiv = document.createElement('div');
-            numberDiv.className = 'box-number';
-            numberDiv.textContent = box.number;
-            boxDiv.appendChild(numberDiv);
-            
-            boxWrapper.appendChild(boxDiv);
-            container.appendChild(boxWrapper);
-        });
+        }
     }
     
-    function showGift(data) {
-        // Удаляем старый gift display если есть
-        const oldDisplay = document.querySelector('.gift-display');
-        if (oldDisplay) {
-            oldDisplay.remove();
-        }
-        
-        // Создаем новый
-        const giftDisplay = document.createElement('div');
-        giftDisplay.className = 'gift-display';
-        giftDisplay.innerHTML = `
-            <h3>🎉 Коробка №${data.number} открыта!</h3>
-            <p class="congrats">${data.congratulation}</p>
-            <img src="${data.gift_image}" alt="Подарок" class="gift-img">
+    // Создание коробок
+    function generateBoxes(boxes) {
+    const container = document.querySelector('.boxes-container');
+    container.innerHTML = '';
+    
+    boxes.forEach(function(box) {      
+        const html = `
+            <div class="box-wrapper" style="top:${box.top}%; left:${box.left}%">
+                <div class="box ${box.opened ? 'opened' : ''}">
+                    ${box.can_open && !box.opened ? 
+                        `<button class="box-btn" onclick="openBox(${box.id})">
+                            <img src="${box.gift_image}" alt="Коробка ${box.number}">
+                        </button>` :
+                        `<div class="box-btn">
+                            <img src="${box.gift_image}" alt="Коробка ${box.number}">
+                            ${box.opened ? '<span class="opened-label">✓</span>' : ''}
+                            ${!box.opened && box.require_auth ? '<span class="lock-label">🔒</span>' : ''}
+                        </div>`
+                    }
+                    <div class="box-number">${box.number}</div>
+                </div>
+            </div>
         `;
         
-        // Добавляем на страницу
-        const container = document.querySelector('.boxes-container');
-        if (container && container.parentNode) {
-            container.parentNode.insertBefore(giftDisplay, container.nextSibling);
-        }
-        
-        // Показываем анимацию
-        giftDisplay.style.animation = 'fadeIn 0.5s';
-        
-        // Прячем сообщение
-        hideMessage();
-    }
+        container.insertAdjacentHTML('beforeend', html);
+    });
+}
     
+    // Показать открытый подарок
+    function showGift(data) {
+    document.querySelector('.gift-display')?.remove();
+    
+    document.querySelector('.boxes-container')
+        .insertAdjacentHTML('afterend', `
+            <div class="gift-display">
+                <h3>🎉 Коробка №${data.number} открыта!</h3>
+                <p>${data.congratulation}</p>
+                <img src="${data.gift_image}" alt="Подарок" class="gift-img"> 
+            </div>
+        `);
+}
+    
+    // Скрыть подарок
     function hideGiftDisplay() {
         const giftDisplay = document.querySelector('.gift-display');
-        if (giftDisplay) {
-            giftDisplay.remove();
-        }
+        if (giftDisplay) giftDisplay.remove();
     }
-    
-    function hideMessage() {
-        const message = document.querySelector('.message');
-        if (message) {
-            message.style.display = 'none';
-        }
-    }
-    
+
+    // Показать ошибку
     function showError(message) {
-        // Удаляем старые сообщения
         removeOldMessages();
         
-        // Создаем блок с ошибкой
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error';
         errorDiv.textContent = message;
         
-        // Вставляем после заголовка
         const h1 = document.querySelector('h1');
         if (h1 && h1.parentNode) {
             h1.parentNode.insertBefore(errorDiv, h1.nextSibling);
         }
         
-        // Автоматически скрываем через 5 секунд
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.remove();
-            }
+        setTimeout(function() {
+            if (errorDiv.parentNode) errorDiv.remove();
         }, 5000);
     }
     
+    // Показать успех
     function showSuccess(message) {
-        // Удаляем старые сообщения
         removeOldMessages();
         
-        // Создаем блок с успехом
         const successDiv = document.createElement('div');
         successDiv.className = 'success';
         successDiv.textContent = message;
         
-        // Вставляем после заголовка
         const h1 = document.querySelector('h1');
         if (h1 && h1.parentNode) {
             h1.parentNode.insertBefore(successDiv, h1.nextSibling);
         }
         
-        // Автоматически скрываем через 5 секунд
-        setTimeout(() => {
-            if (successDiv.parentNode) {
-                successDiv.remove();
-            }
+        setTimeout(function() {
+            if (successDiv.parentNode) successDiv.remove();
         }, 5000);
     }
-    
+
+    // Удалить старые сообщения
     function removeOldMessages() {
-        const errors = document.querySelectorAll('.error, .success');
-        errors.forEach(msg => {
-            if (msg.parentNode) {
-                msg.remove();
-            }
-        });
+        document.querySelectorAll('.error, .success').forEach(el => el.remove());
     }
+    
 </script>
 {% endblock %}
 
@@ -319,7 +194,7 @@
 <div class="user-info">
     <span>Вы вошли как: {{ login }}</span> | <a href="/lab9/logout">Выйти</a>
     <form class="santa-form">
-        <button type="button" class="santa-btn">🎅 Дед Мороз</button>
+        <button type="button" class="santa-btn" onclick="resetAllBoxes()">🎅 Дед Мороз</button>
     </form>
 </div>
 {% endif %}
@@ -332,8 +207,7 @@
 </div>
 
 <div class="boxes-container">
-    <!-- Коробки будут загружены через JavaScript -->
-    <div class="loading">Загрузка...</div>
+    <div class="loading">Загрузка коробок...</div>
 </div>
 
 <div class="message">
